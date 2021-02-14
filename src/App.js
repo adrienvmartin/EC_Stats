@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { parse } from 'papaparse';
 
 function App() {
+  const [highlighted, setHighlighted] = React.useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>
+      <h1 className="text-center text-4xl">File Import</h1>
+      <div className={`p-6 my-2 mx-auto max-w-md border-2 ${highlighted ? 'border-green-600 bg-green-10' : 'border-gray-600'}`}
+        onDragEnter={() => {
+          setHighlighted(true);
+        }}
+        onDragLeave={() => {
+          setHighlighted(false);
+        }}
+        onDragOver={(e) => { e.preventDefault();}}
+        onDrop={(e) => {
+          e.preventDefault();
+          setHighlighted(false);
+          console.log(e); }}
+      >DROP HERE</div>
+   </div>
   );
 }
 
