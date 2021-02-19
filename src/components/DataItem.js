@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Item = () => {
+export const DataItem = (data) => {
   return (
     <div>
-
+      {data}
     </div>
   )
 }
