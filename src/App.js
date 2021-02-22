@@ -1,5 +1,6 @@
 import React from 'react';
 import { parse } from 'papaparse';
+import { averageHigh } from './parser';
 
 function App() {
   const [highlighted, setHighlighted] = React.useState(false);
@@ -27,9 +28,9 @@ function App() {
               const result = parse(text, {
                 header: true,
                 skipEmptyLines: true,
-                transformHeader: (h) => { return h.trim(); }
+                transformHeader: (h) => { return h.replace(/\s/g, ''); }
               });
-              console.log(result);
+              console.log(averageHigh(result.data));
               setData(existing => [...existing, ...result.data]);
           })
        }}
