@@ -24,7 +24,11 @@ function App() {
             .filter((file) => file.type === "text/csv")
             .forEach(async (file) => {
               const text = await file.text();
-              const result = parse(text, { header: true, skipEmptyLines: true, });
+              const result = parse(text, {
+                header: true,
+                skipEmptyLines: true,
+                transformHeader: (h) => { return h.trim(); }
+              });
               console.log(result);
               setData(existing => [...existing, ...result.data]);
           })
