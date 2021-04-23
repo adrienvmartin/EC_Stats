@@ -11,6 +11,9 @@ export class App extends React.Component {
           <Col></Col>
           </Row>
         <br />
+
+{/* CSV SELECTION */}
+{/*******************/}
         <Row>
           <Col></Col>
           <Col><Form>
@@ -23,6 +26,8 @@ export class App extends React.Component {
         </Row>
         <br />
 
+{/* MONTH SELECTION */}
+{/*******************/}
         <Row className="justify-content-md-center">
           <Col sm={2}>
                 <Form.Check label={"Select All Months"} />
@@ -30,11 +35,8 @@ export class App extends React.Component {
           <Col sm={2}>
                <Form.Check label={"Select None"} />
           </Col>
-      
         </Row>
-        
         <br />
-
         <Row className="justify-content-md-center">
           <Col md={3}>
             <Form>
@@ -67,7 +69,14 @@ export class App extends React.Component {
               </Form>
             </Col>
         </Row>
-       
+
+{/* DATA SELECTION */}
+{/*******************/}
+        <Row className="justify-content-md-center">
+          <Col></Col>
+
+       </Row>
+        
       </Container>
     )
   }
