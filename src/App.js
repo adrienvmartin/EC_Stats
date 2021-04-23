@@ -36,12 +36,8 @@ function App() {
        }}
       >DROP HERE</div>
 
-      <ul>
-        {data.map(d => <li key={data.indexOf(d)}>
-          <strong>{Object.values(d)[4]}:</strong>
-          {Object.entries(d)}
-        </li>)}
-      </ul>
+      <div>
+      </div>
    </div>
   );
 }

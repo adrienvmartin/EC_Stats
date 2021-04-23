@@ -1,20 +1,19 @@
 export const averageHigh = (input) => {
 
-  let avgArray = [];
+  let janArray = [];
+  let janTotal = 0;
 
-  // console.log(`INITIAL Parser result: ${result}\nINITIAL Parser average: ${average}`);
-
-  for (let i = 0; i < input.length; i++) {
-    avgArray.push(input[i]["MaxTemp(°C)"]);
+  // Try January max temp only
+  for (let i = 0; i < 31; i++) {
+    janArray.push(Number(input[i]["MaxTemp(°C)"]));
   }
-  
-  let total = 0;
-  for (let i = 0; i < avgArray.length; i++) {
-    total += avgArray[i];
-  }
-  
-  const result = total / avgArray.length;
-  console.log(`FINAL Parser average: ${result}`);
 
-  return result;
+  for (let i = 0; i < janArray.length; i++) {
+    janTotal += janArray[i];
+  }
+
+  console.log(`The highest high in January was: ${Math.max(...janArray)}`)
+  console.log(`The lowest high in January was: ${Math.min(...janArray)}`)
+
+  return janTotal / 31;
 };
