@@ -91,7 +91,7 @@ export class App extends React.Component {
           <Card.Body>
             <Card.Title>Select Data Points</Card.Title>
             <Row className="justify-content-md-center">
-              <Col md={3}>
+              <Col lg={6}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Averages & Extremes</Card.Title>
@@ -107,7 +107,7 @@ export class App extends React.Component {
                   </Card.Body>
                 </Card>
               </Col>
-              <Col md={3}>
+              <Col md={6}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Warmest & Coldest</Card.Title>
@@ -124,7 +124,7 @@ export class App extends React.Component {
                   </Card.Body>
                 </Card>
               </Col>
-              <Col md={3}>
+              <Col md={6}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Precipitation</Card.Title>
@@ -134,6 +134,23 @@ export class App extends React.Component {
                         <Form.Check label="Total precipitation" />
                         <Form.Check label="Wettest day" />
                         <Form.Check label="Average rain day" />
+                      </Form.Group>
+                    </Form>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={6}>
+                <Card>
+                  <Card.Body>
+                    <Card.Title>Random</Card.Title>
+                    <Form>
+                      <Form.Group>
+                        <Form.Check label="Warmest day of the week" />
+                        <Form.Check label="# of days above average" />
+                        <Form.Check label="# of days below average" />
+                        <Form.Check label="Coldest low" />
+                        <Form.Check label="Warmest mean" />
+                        <Form.Check label="Coldest mean" />
                       </Form.Group>
                     </Form>
                   </Card.Body>
