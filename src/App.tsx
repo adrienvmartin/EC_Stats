@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Form, Card } from 'react-bootstrap';
+import { Container, Row, Col, Form, Card, Button } from 'react-bootstrap';
 
 export class App extends React.Component {
   render() {
@@ -159,6 +159,9 @@ export class App extends React.Component {
             </Row>
           </Card.Body>
         </Card>
+        <br />
+        <br />
+        <Button>Generate Report</Button>
         <br />
         <br />
       </Container>
