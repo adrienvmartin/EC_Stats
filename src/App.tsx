@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Form, Card } from 'react-bootstrap';
+import { Container, Row, Col, Form, Card, Button } from 'react-bootstrap';
 
 export class App extends React.Component {
   render() {
@@ -26,6 +26,8 @@ export class App extends React.Component {
                 <Form>
                   <Form.Group>
                     <Form.File id="csvinput" label="Select CSV File Here" />
+                    <br />
+                    <Button>Generate</Button>
                   </Form.Group>
                 </Form>
               </Card.Body>
