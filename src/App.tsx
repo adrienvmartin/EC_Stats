@@ -3,7 +3,8 @@ import { Container, Row, Col, Form, Card, Button } from 'react-bootstrap';
 import { CsvReader } from './CsvReader';
 
 export class App extends React.Component {
-  onSubmit(filename: string) {
+  private onSubmit(e: React.FormEvent<HTMLInputElement>, filename: string) {
+    e.preventDefault();
     console.log('Submitted!');
     return new CsvReader(filename);
   }
