@@ -33,9 +33,7 @@ export class App extends React.Component {
                   <Form.Group controlId="CsvSelector">
                     <Form.File id="csvinput" label="Select CSV File Here" />
                     <br />
-                    <Button type="submit" onClick={this.sendAMessage}>
-                      Generate
-                    </Button>
+                    <Button type="submit">Generate</Button>
                   </Form.Group>
                 </Form>
               </Card.Body>
