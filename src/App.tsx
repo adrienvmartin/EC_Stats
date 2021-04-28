@@ -1,11 +1,29 @@
 import React from 'react';
-import { Container, Row, Col, Form, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
-export class App extends React.Component {
+interface AppState {
+  filename: string;
+}
+
+interface AppProps {
+  stats?: [];
+}
+
+export class App extends React.Component<AppProps, AppState> {
+  constructor(props: AppProps) {
+    super(props);
+    this.state = { filename: '' };
+  }
+
   private onSubmit(filename: string) {
     console.log(`Submitted: ${filename}`);
     // return new CsvReader(filename);
   }
+
+  onHandleClick = (filename: string): void => {
+    this.setState({ filename: filename });
+    console.log(this.state.filename);
+  };
 
   render() {
     return (
@@ -28,18 +46,16 @@ export class App extends React.Component {
           <Col>
             <Card>
               <Card.Body>
-                <Form>
-                  <Form.Group controlId="CsvSelector">
-                    <Form.File id="csvinput" label="Select CSV File Here" />
-                    <br />
-                    <Button
-                      type="submit"
-                      onClick={() => this.onSubmit('.csvinput')}
-                    >
-                      Generate
-                    </Button>
-                  </Form.Group>
-                </Form>
+                <form>
+                  <input type="file" name="csvFile" />
+                  <br />
+                  <button
+                    type="submit"
+                    onClick={() => this.onSubmit('csvFile')}
+                  >
+                    Generate
+                  </button>
+                </form>
               </Card.Body>
             </Card>
           </Col>
