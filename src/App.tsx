@@ -1,12 +1,10 @@
 import React from 'react';
 import { Container, Row, Col, Form, Card, Button } from 'react-bootstrap';
-import { CsvReader } from './CsvReader';
 
 export class App extends React.Component {
-  private onSubmit(e: React.FormEvent<HTMLInputElement>, filename: string) {
-    e.preventDefault();
-    console.log('Submitted!');
-    return new CsvReader(filename);
+  private onSubmit(filename: string) {
+    console.log(`Submitted: ${filename}`);
+    // return new CsvReader(filename);
   }
 
   render() {
@@ -34,7 +32,12 @@ export class App extends React.Component {
                   <Form.Group controlId="CsvSelector">
                     <Form.File id="csvinput" label="Select CSV File Here" />
                     <br />
-                    <Button type="submit">Generate</Button>
+                    <Button
+                      type="submit"
+                      onClick={() => this.onSubmit('.csvinput')}
+                    >
+                      Generate
+                    </Button>
                   </Form.Group>
                 </Form>
               </Card.Body>
