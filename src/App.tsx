@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
+import { parse } from 'papaparse';
 
 interface AppState {
   filename: string;
@@ -47,14 +48,30 @@ export class App extends React.Component<AppProps, AppState> {
             <Card>
               <Card.Body>
                 <form>
-                  <input type="file" name="csvFile" />
-                  <br />
-                  <button
-                    type="submit"
-                    onClick={() => this.onSubmit('csvFile')}
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+
+                      Array.from(e.dataTransfer.files)
+                        .filter((file) => file.type === 'text/csv')
+                        .forEach(async (file) => {
+                          const text = await file.text();
+                          const result = parse(text, {
+                            header: true,
+                            skipEmptyLines: true,
+                            transformHeader: (h) => {
+                              return h.replace(/\s/g, '');
+                            },
+                          });
+                          console.log(result);
+                        });
+                    }}
                   >
-                    Generate
-                  </button>
+                    DROP HERE
+                  </div>
                 </form>
               </Card.Body>
             </Card>
