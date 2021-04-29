@@ -5,7 +5,7 @@ import { monthParser, Months, CsvObject } from './parser';
 
 interface AppState {
   filename: string;
-  data?: any;
+  data?: CsvObject[];
   months?: Months;
 }
 
@@ -69,17 +69,18 @@ export class App extends React.Component<AppProps, AppState> {
                               return h.replace(/\s/g, '');
                             },
                           });
-                          const monthObject: Months = monthParser(result.data);
+                          const months: Months = monthParser(result.data);
                           this.setState({
                             data: result.data,
-                            months: monthObject,
+                            months,
                           });
+                          /*
                           console.log('Month Parser: \n');
                           console.log(monthParser(this.state.data));
                           console.log('\n result.data: \n');
                           console.log(result.data);
                           console.log('\n this.state: \n');
-                          console.log(this.state);
+                          console.log(this.state); */
                         });
                     }}
                   >
