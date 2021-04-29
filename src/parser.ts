@@ -78,3 +78,5 @@ export interface Months {
   Nov: CsvObject[];
   Dec: CsvObject[];
 }
+
+export type Month = CsvObject[];
