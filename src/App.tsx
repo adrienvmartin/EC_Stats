@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse, ParseResult } from 'papaparse';
 import { monthParser, Months, CsvObject } from './parser';
+import { warmestHigh } from './analyzers/StatsAnalyzer';
 
 interface AppState {
   filename: string;
@@ -42,7 +43,6 @@ export class App extends React.Component<AppProps, AppState> {
           <Col></Col>
         </Row>
         <br />
-
         {/* CSV SELECTION */}
         {/*******************/}
         <Row className="justify-content-md-center">
@@ -74,13 +74,18 @@ export class App extends React.Component<AppProps, AppState> {
                             data: result.data,
                             months,
                           });
-                          /*
+
                           console.log('Month Parser: \n');
-                          console.log(monthParser(this.state.data));
+                          console.log(monthParser(result.data));
                           console.log('\n result.data: \n');
                           console.log(result.data);
                           console.log('\n this.state: \n');
-                          console.log(this.state); */
+                          console.log(this.state);
+
+                          if (this.state.months !== undefined) {
+                            console.log('\n Warmest high: \n');
+                            console.log(warmestHigh(this.state.months.Apr));
+                          }
                         });
                     }}
                   >
@@ -93,6 +98,11 @@ export class App extends React.Component<AppProps, AppState> {
           <Col></Col>
         </Row>
         <br />
+        {this.state.months
+          ? this.state.months.Jan.map((m) => (
+              <div key={Math.random()}>{Object.values(m)}</div>
+            ))
+          : null}
       </Container>
     );
   }
