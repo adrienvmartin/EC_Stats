@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { parse } from 'papaparse';
-import { monthParser, Months } from './parser';
+import { parse, ParseResult } from 'papaparse';
+import { monthParser, Months, CsvObject } from './parser';
 
 interface AppState {
   filename: string;
@@ -62,7 +62,7 @@ export class App extends React.Component<AppProps, AppState> {
                         .filter((file) => file.type === 'text/csv')
                         .forEach(async (file) => {
                           const text = await file.text();
-                          const result = parse(text, {
+                          const result: ParseResult<CsvObject> = parse(text, {
                             header: true,
                             skipEmptyLines: true,
                             transformHeader: (h) => {
@@ -72,8 +72,12 @@ export class App extends React.Component<AppProps, AppState> {
                           this.setState({
                             data: result.data,
                           });
+                          console.log('Month Parser: \n');
                           console.log(monthParser(this.state.data));
-                          // console.log(result.data);
+                          console.log('\n result.data: \n');
+                          console.log(result.data);
+                          console.log('\n this.state: \n');
+                          console.log(this.state);
                         });
                     }}
                   >
