@@ -1,10 +1,12 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse } from 'papaparse';
+import { monthParser, Months } from './parser';
 
 interface AppState {
   filename: string;
   data?: any;
+  months?: Months;
 }
 
 interface AppProps {
@@ -67,8 +69,11 @@ export class App extends React.Component<AppProps, AppState> {
                               return h.replace(/\s/g, '');
                             },
                           });
-                          this.setState({ data: result.data });
-                          console.log(this.state.data[1]['MaxTemp(°C)']);
+                          this.setState({
+                            data: result.data,
+                          });
+                          console.log(monthParser(this.state.data));
+                          // console.log(result.data);
                         });
                     }}
                   >
