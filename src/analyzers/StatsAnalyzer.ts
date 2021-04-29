@@ -1,11 +1,11 @@
-import { CsvObject } from '../parser';
+import { Month } from '../parser';
 
-export const warmestHigh = (months: CsvObject[]): number => {
-  const highs: string[] = [];
-  months.forEach((m) => {
-    highs.push(m['MaxTemp(°C)']);
+export const warmestHigh = (month: Month): any => {
+  const highs: number[] = [];
+  month.forEach((m) => {
+    highs.push(Number(m['MaxTemp(°C)']));
   });
-  return Math.max(Number(highs));
+  return Math.max(...highs);
 };
 
 export const coldestHigh = (highs: string[]) => {
