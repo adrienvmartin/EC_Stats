@@ -1,6 +1,10 @@
-export class StatsAnalysis {}
+import { CsvObject } from '../parser';
 
-export const warmestHigh = (highs: string[]) => {
+export const warmestHigh = (months: CsvObject[]): number => {
+  const highs: string[] = [];
+  months.forEach((m) => {
+    highs.push(m['MaxTemp(°C)']);
+  });
   return Math.max(Number(highs));
 };
 
