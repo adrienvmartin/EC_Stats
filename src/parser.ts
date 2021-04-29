@@ -65,18 +65,18 @@ export const monthParser = (data: CsvObject[]) => {
 };
 
 export interface Months {
-  Jan: CsvObject[];
-  Feb: CsvObject[];
-  Mar: CsvObject[];
-  Apr: CsvObject[];
-  May: CsvObject[];
-  Jun: CsvObject[];
-  Jul: CsvObject[];
-  Aug: CsvObject[];
-  Sep: CsvObject[];
-  Oct: CsvObject[];
-  Nov: CsvObject[];
-  Dec: CsvObject[];
+  Jan: {}[];
+  Feb: {}[];
+  Mar: {}[];
+  Apr: {}[];
+  May: {}[];
+  Jun: {}[];
+  Jul: {}[];
+  Aug: {}[];
+  Sep: {}[];
+  Oct: {}[];
+  Nov: {}[];
+  Dec: {}[];
 }
 
 export type Month = CsvObject[];
