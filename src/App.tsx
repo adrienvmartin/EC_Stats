@@ -4,6 +4,7 @@ import { parse } from 'papaparse';
 
 interface AppState {
   filename: string;
+  data?: any;
 }
 
 interface AppProps {
@@ -66,7 +67,8 @@ export class App extends React.Component<AppProps, AppState> {
                               return h.replace(/\s/g, '');
                             },
                           });
-                          console.log(result);
+                          this.setState({ data: result.data });
+                          console.log(this.state.data[1]['MaxTemp(°C)']);
                         });
                     }}
                   >
