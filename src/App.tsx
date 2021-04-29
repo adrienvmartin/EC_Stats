@@ -69,8 +69,10 @@ export class App extends React.Component<AppProps, AppState> {
                               return h.replace(/\s/g, '');
                             },
                           });
+                          const monthObject: Months = monthParser(result.data);
                           this.setState({
                             data: result.data,
+                            months: monthObject,
                           });
                           console.log('Month Parser: \n');
                           console.log(monthParser(this.state.data));
