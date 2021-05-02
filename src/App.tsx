@@ -84,7 +84,11 @@ export class App extends React.Component<AppProps, AppState> {
 
                           if (this.state.months !== undefined) {
                             console.log('\n Warmest high: \n');
-                            console.log(warmestHigh(this.state.months.Apr));
+                            console.log(
+                              warmestHigh(this.state.months.Apr, [
+                                'MinTemp(°C)',
+                              ])
+                            );
                           }
                         });
                     }}
