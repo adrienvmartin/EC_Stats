@@ -1,4 +1,4 @@
-export interface CsvObject {
+export type CsvObject = {
   'Longitude(x)': string;
   'Latitude(y)': string;
   StationName: string;
@@ -30,7 +30,7 @@ export interface CsvObject {
   DirofMaxGustFlag: string;
   'SpdofMaxGust(km/h)': string;
   SpdofMaxGustFlag: string;
-}
+};
 
 export const monthParser = (data: CsvObject[]) => {
   // Add check for leap years
