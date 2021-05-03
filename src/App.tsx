@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse, ParseResult } from 'papaparse';
 import { monthParser, Months, CsvObject } from './parser';
-import { warmestHigh } from './analyzers/StatsAnalyzer';
+import { warmestHigh, Calculator } from './analyzers/StatsAnalyzer';
 
 interface AppState {
   filename: string;
@@ -75,6 +75,8 @@ export class App extends React.Component<AppProps, AppState> {
                             months,
                           });
 
+                          const calc = new Calculator();
+
                           console.log('Month Parser: \n');
                           console.log(monthParser(result.data));
                           console.log('\n result.data: \n');
@@ -83,11 +85,9 @@ export class App extends React.Component<AppProps, AppState> {
                           console.log(this.state);
 
                           if (this.state.months !== undefined) {
-                            console.log('\n Warmest high: \n');
+                            console.log('Calculator Class: \n');
                             console.log(
-                              warmestHigh(this.state.months.Apr, [
-                                'MinTemp(°C)',
-                              ])
+                              calc.warmest(this.state.months.Apr, 'MinTemp(°C)')
                             );
                           }
                         });
