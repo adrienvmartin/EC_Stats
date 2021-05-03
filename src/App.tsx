@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse, ParseResult } from 'papaparse';
 import { monthParser, Months, CsvObject } from './parser';
-import { warmestHigh, Calculator } from './analyzers/StatsAnalyzer';
+import { Calculator } from './analyzers/StatsAnalyzer';
 
 interface AppState {
   filename: string;
@@ -13,6 +13,8 @@ interface AppState {
 interface AppProps {
   stats?: [];
 }
+
+const calc = new Calculator();
 
 export class App extends React.Component<AppProps, AppState> {
   constructor(props: AppProps) {
@@ -75,20 +77,18 @@ export class App extends React.Component<AppProps, AppState> {
                             months,
                           });
 
-                          const calc = new Calculator();
-
-                          console.log('Month Parser: \n');
-                          console.log(monthParser(result.data));
-                          console.log('\n result.data: \n');
-                          console.log(result.data);
-                          console.log('\n this.state: \n');
-                          console.log(this.state);
-
                           if (this.state.months !== undefined) {
-                            console.log('Calculator min: \n');
-                            console.log(
-                              calc.coldest(this.state.months.Feb, 'MinTemp(°C)')
+                            const monthlyMaxes = calc.dataEachMonth(
+                              Object.values(this.state.months),
+                              'MaxTemp(°C)'
                             );
+                            console.log(
+                              'Array from everyMonth (max temp for each month): \n'
+                            );
+                            console.log(monthlyMaxes);
+
+                            console.log('Max temp of all months: \n');
+                            console.log(Math.max(...monthlyMaxes));
                           }
                         });
                     }}
