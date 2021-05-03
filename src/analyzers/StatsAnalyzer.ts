@@ -12,13 +12,7 @@ export const warmestHigh = (month: Month, key: [keyof CsvObject]): number => {
 };
 
 // T = CsvObject, K extends the keys of CsvObject & uses them as its value for inputting which stat we want
-export class Calculator<T> {
-  constructor(private data: T) {}
-
-  get = <K extends keyof T>(key: K): T[K] => {
-    return this.data[key];
-  };
-
+export class Calculator {
   warmest = <K extends keyof CsvObject>(month: Month, key: K): number => {
     const highs: number[] = [];
     month.forEach((m) => {
