@@ -85,9 +85,9 @@ export class App extends React.Component<AppProps, AppState> {
                           console.log(this.state);
 
                           if (this.state.months !== undefined) {
-                            console.log('Calculator Class: \n');
+                            console.log('Calculator min: \n');
                             console.log(
-                              calc.warmest(this.state.months.Apr, 'MinTemp(°C)')
+                              calc.coldest(this.state.months.Feb, 'MinTemp(°C)')
                             );
                           }
                         });
