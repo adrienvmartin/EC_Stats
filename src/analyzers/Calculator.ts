@@ -34,4 +34,24 @@ export class Calculator {
     });
     return yearArray;
   };
+
+  // Return the date of the warmest high
+  specificDate = <K extends keyof CsvObject>(
+    set: CsvObject[],
+    key: K
+  ): string => {
+    const newArray: number[] = [];
+    let dateIndex;
+    let warmestNumber;
+    let warmestNumberDate;
+    set.forEach((s) => {
+      newArray.push(Number(s[key]));
+    });
+    warmestNumber = Math.max(...newArray);
+    dateIndex = newArray.indexOf(Math.max(...newArray));
+    warmestNumberDate = set[dateIndex]['Date/Time'];
+    return `
+    The warmest high of the year was ${warmestNumber} on ${warmestNumberDate}
+    `;
+  };
 }
