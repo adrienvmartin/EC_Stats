@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse, ParseResult } from 'papaparse';
 import { monthParser, Months, CsvObject } from './parser';
-import { Calculator } from './analyzers/StatsAnalyzer';
+import { Calculator } from './analyzers/Calculator';
 
 interface AppState {
   filename: string;
