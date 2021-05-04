@@ -97,8 +97,12 @@ export class App extends React.Component<AppProps, AppState> {
                           });
 
                           if (this.state.data !== undefined) {
+                            const newobj = calc.specificDate(
+                              this.state.data,
+                              'MaxTemp(°C)'
+                            );
                             console.log(
-                              calc.specificDate(this.state.data, 'MaxTemp(°C)')
+                              `The ${newobj.parameter} was ${newobj.value} on ${newobj.date}`
                             );
                           }
 
