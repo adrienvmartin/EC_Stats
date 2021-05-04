@@ -80,3 +80,9 @@ export interface Months {
 }
 
 export type Month = CsvObject[];
+
+export interface ParameterObject {
+  parameter: string;
+  value: string | number | boolean;
+  date: string;
+}
