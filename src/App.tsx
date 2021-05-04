@@ -96,6 +96,12 @@ export class App extends React.Component<AppProps, AppState> {
                             months,
                           });
 
+                          if (this.state.data !== undefined) {
+                            console.log(
+                              calc.specificDate(this.state.data, 'MaxTemp(°C)')
+                            );
+                          }
+
                           if (this.state.months !== undefined) {
                             const monthlyMaxes = calc.dataEachMonth(
                               Object.values(this.state.months),
