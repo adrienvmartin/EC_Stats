@@ -1,4 +1,4 @@
-import { Month, CsvObject } from '../parser';
+import { Month, CsvObject, ParameterObject } from '../parser';
 
 // Make Calculator generic class and then pass in key when creating new instance?
 // e.g. const coldCalc = new Calculator('MinTempC'); etc.?
@@ -39,7 +39,7 @@ export class Calculator {
   specificDate = <K extends keyof CsvObject>(
     set: CsvObject[],
     key: K
-  ): string => {
+  ): ParameterObject => {
     const newArray: number[] = [];
     let dateIndex;
     let warmestNumber;
@@ -50,8 +50,10 @@ export class Calculator {
     warmestNumber = Math.max(...newArray);
     dateIndex = newArray.indexOf(Math.max(...newArray));
     warmestNumberDate = set[dateIndex]['Date/Time'];
-    return `
-    The warmest high of the year was ${warmestNumber} on ${warmestNumberDate}
-    `;
+    return {
+      parameter: key,
+      value: warmestNumber,
+      date: warmestNumberDate,
+    };
   };
 }
