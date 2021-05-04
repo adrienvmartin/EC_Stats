@@ -32,6 +32,25 @@ export class App extends React.Component<AppProps, AppState> {
     console.log(this.state.filename);
   };
 
+  warmestHigh = () => {
+    let maxhigh;
+    let maxindex;
+    let indexMonth;
+    if (this.state.months) {
+      const data = calc.dataEachMonth(
+        Object.values(this.state.months),
+        'MaxTemp(°C)'
+      );
+      maxhigh = Math.max(...data);
+      maxindex = data.indexOf(Math.max(...data));
+      if (maxindex === 7) {
+        indexMonth = 'August';
+      }
+    }
+
+    return `The warmest high of the year is: ${maxhigh}, in the month of ${indexMonth}`;
+  };
+
   render() {
     return (
       <Container>
@@ -102,11 +121,7 @@ export class App extends React.Component<AppProps, AppState> {
           <Col></Col>
         </Row>
         <br />
-        {this.state.months
-          ? this.state.months.Jan.map((m) => (
-              <div key={Math.random()}>{Object.values(m)}</div>
-            ))
-          : null}
+        {this.state.months ? this.warmestHigh() : null}
       </Container>
     );
   }
