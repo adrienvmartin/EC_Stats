@@ -51,6 +51,39 @@ export interface Year {
 
 export type FullYear = Month[];
 
+export interface AnalyzedMonth {
+  warmest: {
+    high: {
+      value: string;
+      date: string;
+    };
+    low: {
+      value: string;
+      date: string;
+    };
+    mean: {
+      value: string;
+      date: string;
+    };
+  };
+  coldest: {
+    high: {
+      value: string;
+      date: string;
+    };
+    low: {
+      value: string;
+      date: string;
+    };
+    mean: {
+      value: string;
+      date: string;
+    };
+  };
+}
+
+// Don't use full year/month array as it's unnecessary, instead get just the relevant values
+// e.g. warmest: { high: { Jan: '4.5', Feb: '7.2', Mar: '12.4' } }, etc.
 export interface AnalyzedData {
   warmest?: {
     high?: Year;
