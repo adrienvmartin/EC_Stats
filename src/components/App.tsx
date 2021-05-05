@@ -5,10 +5,9 @@ import { fetchStats } from '../actions';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse, ParseResult } from 'papaparse';
 import { CsvObject } from '../parser';
-import { isConstructorDeclaration } from 'typescript';
 
 interface AppProps {
-  data: CsvObject[];
+  data?: CsvObject[];
 }
 
 interface AppState {
@@ -80,7 +79,7 @@ class _App extends React.Component<AppProps, AppState> {
   }
 }
 
-const mapStateToProps = (state: StoreState): { stats: Stats[] } => {
+const mapStateToProps = (state: StoreState): { stats: CsvObject[] } => {
   return { stats: state.stats };
 };
 
