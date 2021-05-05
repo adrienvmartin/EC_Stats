@@ -3,11 +3,12 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse, ParseResult } from 'papaparse';
 import { monthParser, Months, CsvObject } from './parser';
 import { Calculator } from './analyzers/Calculator';
+import { AnalyzedData } from './data';
 
 interface AppState {
-  filename: string;
-  data?: CsvObject[];
+  year?: CsvObject[];
   months?: Months;
+  data?: AnalyzedData;
 }
 
 interface AppProps {
@@ -17,21 +18,6 @@ interface AppProps {
 const calc = new Calculator();
 
 export class App extends React.Component<AppProps, AppState> {
-  constructor(props: AppProps) {
-    super(props);
-    this.state = { filename: '' };
-  }
-
-  private onSubmit(filename: string) {
-    console.log(`Submitted: ${filename}`);
-    // return new CsvReader(filename);
-  }
-
-  onHandleClick = (filename: string): void => {
-    this.setState({ filename: filename });
-    console.log(this.state.filename);
-  };
-
   warmestHigh = () => {
     let maxhigh;
     let maxindex;
@@ -92,35 +78,21 @@ export class App extends React.Component<AppProps, AppState> {
                           });
                           const months: Months = monthParser(result.data);
                           this.setState({
-                            data: result.data,
+                            year: result.data,
                             months,
                           });
 
                           console.log('this.state');
                           console.log(this.state);
 
-                          if (this.state.data !== undefined) {
+                          if (this.state.year !== undefined) {
                             const newobj = calc.specificDate(
-                              this.state.data,
+                              this.state.year,
                               'MaxTemp(°C)'
                             );
                             console.log(
                               `The ${newobj.parameter} was ${newobj.value} on ${newobj.date}`
                             );
-                          }
-
-                          if (this.state.months !== undefined) {
-                            const monthlyMaxes = calc.dataEachMonth(
-                              Object.values(this.state.months),
-                              'MaxTemp(°C)'
-                            );
-                            console.log(
-                              'Array from everyMonth (max temp for each month): \n'
-                            );
-                            console.log(monthlyMaxes);
-
-                            console.log('Max temp of all months: \n');
-                            console.log(Math.max(...monthlyMaxes));
                           }
                         });
                     }}
@@ -134,7 +106,6 @@ export class App extends React.Component<AppProps, AppState> {
           <Col></Col>
         </Row>
         <br />
-        {this.state.months ? this.warmestHigh() : null}
       </Container>
     );
   }
