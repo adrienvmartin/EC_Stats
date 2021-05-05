@@ -71,9 +71,13 @@ export class App extends React.Component<AppProps, AppState> {
                           const text = await file.text();
                           const result: ParseResult<CsvObject> = parse(text, {
                             header: true,
-                            skipEmptyLines: true,
+                            skipEmptyLines: false,
                             transformHeader: (h) => {
-                              return h.replace(/\s/g, '');
+                              let re = /\s([(*)])/g;
+                              return h.replace(re, '');
+                            },
+                            complete: (results) => {
+                              console.log('Parsing complete: ', results);
                             },
                           });
                           const months: Months = monthParser(result.data);
@@ -81,19 +85,6 @@ export class App extends React.Component<AppProps, AppState> {
                             year: result.data,
                             months,
                           });
-
-                          console.log('this.state');
-                          console.log(this.state);
-
-                          if (this.state.year !== undefined) {
-                            const newobj = calc.specificDate(
-                              this.state.year,
-                              'MaxTemp(°C)'
-                            );
-                            console.log(
-                              `The ${newobj.parameter} was ${newobj.value} on ${newobj.date}`
-                            );
-                          }
                         });
                     }}
                   >
