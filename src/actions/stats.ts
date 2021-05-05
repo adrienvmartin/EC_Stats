@@ -9,7 +9,9 @@ export interface FetchStatsAction {
   payload: CsvObject[];
 }
 
-const createStatsArray = (e: React.DragEvent<HTMLDivElement>): CsvObject[] => {
+const createStatsArray = (
+  e: React.DragEvent<HTMLDivElement>
+): { data: CsvObject[] } => {
   let set: CsvObject[] = [];
   Array.from(e.dataTransfer.files)
     .filter((file) => file.type === 'text/csv')
@@ -27,17 +29,20 @@ const createStatsArray = (e: React.DragEvent<HTMLDivElement>): CsvObject[] => {
         },
       });
       set = result.data;
+      console.log('result.data: ', result.data);
     });
-  return set;
+  return {
+    data: set,
+  };
 };
 
 // Put Array.from into separate function, call that function within fetchStats
 export const fetchStats = (e: React.DragEvent<HTMLDivElement>) => {
-  return async (dispatch: Dispatch) => {
-    const response = await createStatsArray(e);
+  return (dispatch: Dispatch) => {
+    const response = createStatsArray(e);
     dispatch<FetchStatsAction>({
       type: ActionTypes.fetchStats,
-      payload: response,
+      payload: response.data,
     });
   };
 };

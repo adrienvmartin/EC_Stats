@@ -3,19 +3,21 @@ import { connect } from 'react-redux';
 import { StoreState } from '../reducers';
 import { fetchStats } from '../actions';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { parse, ParseResult } from 'papaparse';
 import { CsvObject } from '../parser';
 
 interface AppProps {
-  data?: CsvObject[];
+  fetchStats: Function;
 }
 
 interface AppState {
-  data?: CsvObject[];
+  stats?: CsvObject[];
 }
 
 class _App extends React.Component<AppProps, AppState> {
-  renderStats() {}
+  constructor(props: AppProps) {
+    super(props);
+    this.state = {};
+  }
 
   render() {
     return (
@@ -44,31 +46,19 @@ class _App extends React.Component<AppProps, AppState> {
                     }}
                     onDrop={(e) => {
                       e.preventDefault();
-
-                      Array.from(e.dataTransfer.files)
-                        .filter((file) => file.type === 'text/csv')
-                        .forEach(async (file) => {
-                          const text = await file.text();
-                          const result: ParseResult<CsvObject> = parse(text, {
-                            header: true,
-                            skipEmptyLines: false,
-                            transformHeader: (h) => {
-                              let regex = /\s/g;
-                              return h.replace(regex, '');
-                            },
-                            complete: (results) => {
-                              console.log('Parsing complete: \n', results);
-                            },
-                          });
-                          this.setState({ data: result.data });
-                          console.log('this.state: \n', this.state.data);
-                        });
+                      this.props.fetchStats(e);
+                      console.log('this.state: ', this.state);
                     }}
                   >
                     DROP HERE
                   </div>
                 </form>
               </Card.Body>
+            </Card>
+            <Card>
+              <div>
+                {this.state.stats ? 'State was found!' : 'State was NOT found!'}
+              </div>
             </Card>
           </Col>
           <Col></Col>
