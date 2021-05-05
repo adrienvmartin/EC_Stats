@@ -1,4 +1,4 @@
-import { Month } from '../actions/data';
+import { Month } from '../data';
 
 export interface StoreState {
   months: Month[];
