@@ -1,4 +1,4 @@
-export interface DayObject {
+export interface CsvObject {
   'Longitude(x)': string;
   'Latitude(y)': string;
   StationName: string;
@@ -32,7 +32,7 @@ export interface DayObject {
   SpdofMaxGustFlag: string;
 }
 
-export type Month = DayObject[];
+export type Month = CsvObject[];
 
 export interface Year {
   Jan: Month;

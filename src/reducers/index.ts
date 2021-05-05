@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
-import { DayObject } from '../data';
+import { CsvObject } from '../datatypes';
+import { statsReducer } from './stats';
 
 export interface StoreState {
-  data: DayObject[];
+  stats: CsvObject[];
 }
 
 export const reducers = combineReducers<StoreState>({
-  data: null,
+  stats: statsReducer,
 });

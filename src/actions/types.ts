@@ -1,7 +1,7 @@
-import { FetchDataAction } from './data';
+import { FetchStatsAction } from './stats';
 
 export enum ActionTypes {
-  fetchData,
+  fetchStats,
 }
 
-export type Action = FetchDataAction;
+export type Action = FetchStatsAction;
