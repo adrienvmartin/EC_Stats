@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { StoreState } from '../reducers';
+import { fetchStats } from '../actions';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse, ParseResult } from 'papaparse';
-import { CsvObject } from './parser';
+import { CsvObject } from '../parser';
+import { isConstructorDeclaration } from 'typescript';
 
 interface AppProps {
   data: CsvObject[];
@@ -12,7 +15,7 @@ interface AppState {
   data?: CsvObject[];
 }
 
-export class App extends React.Component<AppProps, AppState> {
+class _App extends React.Component<AppProps, AppState> {
   renderStats() {}
 
   render() {
@@ -76,3 +79,9 @@ export class App extends React.Component<AppProps, AppState> {
     );
   }
 }
+
+const mapStateToProps = (state: StoreState): { stats: Stats[] } => {
+  return { stats: state.stats };
+};
+
+export const App = connect(mapStateToProps, { fetchStats })(_App);
