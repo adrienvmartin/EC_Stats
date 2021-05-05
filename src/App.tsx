@@ -96,6 +96,9 @@ export class App extends React.Component<AppProps, AppState> {
                             months,
                           });
 
+                          console.log('this.state');
+                          console.log(this.state);
+
                           if (this.state.data !== undefined) {
                             const newobj = calc.specificDate(
                               this.state.data,
