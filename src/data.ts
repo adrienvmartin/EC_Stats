@@ -1,4 +1,4 @@
-export interface Month {
+export interface Day {
   'Longitude(x)': string;
   'Latitude(y)': string;
   StationName: string;
@@ -32,6 +32,8 @@ export interface Month {
   SpdofMaxGustFlag: string;
 }
 
+export type Month = Day[];
+
 export interface Year {
   Jan: Month;
   Feb: Month;
@@ -48,3 +50,16 @@ export interface Year {
 }
 
 export type FullYear = Month[];
+
+export interface AnalyzedData {
+  warmest?: {
+    high?: Year;
+    low?: Year;
+    mean?: Year;
+  };
+  coldest?: {
+    high?: Year;
+    low?: Year;
+    mean?: Year;
+  };
+}
