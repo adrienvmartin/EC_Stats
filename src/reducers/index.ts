@@ -1,5 +1,10 @@
-import { Month } from '../data';
+import { combineReducers } from 'redux';
+import { DayObject } from '../data';
 
 export interface StoreState {
-  months: Month[];
+  data: DayObject[];
 }
+
+export const reducers = combineReducers<StoreState>({
+  data: null,
+});

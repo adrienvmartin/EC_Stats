@@ -1,4 +1,4 @@
-export interface Day {
+export interface DayObject {
   'Longitude(x)': string;
   'Latitude(y)': string;
   StationName: string;
@@ -32,7 +32,7 @@ export interface Day {
   SpdofMaxGustFlag: string;
 }
 
-export type Month = Day[];
+export type Month = DayObject[];
 
 export interface Year {
   Jan: Month;

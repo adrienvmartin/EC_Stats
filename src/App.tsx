@@ -1,13 +1,20 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { parse, ParseResult } from 'papaparse';
 import { CsvObject } from './parser';
+
+interface AppProps {
+  data: CsvObject[];
+}
 
 interface AppState {
   data?: CsvObject[];
 }
 
-export class App extends React.Component<{}, AppState> {
+export class App extends React.Component<AppProps, AppState> {
+  renderStats() {}
+
   render() {
     return (
       <Container>
