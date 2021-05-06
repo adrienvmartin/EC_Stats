@@ -1,25 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { StoreState } from '../reducers';
-import { fetchStats } from '../actions';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { CsvObject } from '../parser';
+import { CsvObject } from './parser';
 import { parse, ParseResult } from 'papaparse';
-
-interface AppProps {
-  fetchStats: Function;
-}
 
 interface AppState {
   stats?: CsvObject[];
 }
 
-class _App extends React.Component<AppProps, AppState> {
-  constructor(props: AppProps) {
-    super(props);
-    this.state = {};
-  }
-
+export class App extends React.Component<{}, AppState> {
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
     Array.from(e.dataTransfer.files)
       .filter((file) => file.type === 'text/csv')
@@ -89,9 +77,3 @@ class _App extends React.Component<AppProps, AppState> {
     );
   }
 }
-
-const mapStateToProps = (state: StoreState): { stats: CsvObject[] } => {
-  return { stats: state.stats };
-};
-
-export const App = connect(mapStateToProps, { fetchStats })(_App);
