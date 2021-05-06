@@ -4,6 +4,7 @@ import { StoreState } from '../reducers';
 import { fetchStats } from '../actions';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { CsvObject } from '../parser';
+import { parse, ParseResult } from 'papaparse';
 
 interface AppProps {
   fetchStats: Function;
@@ -18,6 +19,27 @@ class _App extends React.Component<AppProps, AppState> {
     super(props);
     this.state = {};
   }
+
+  createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
+    Array.from(e.dataTransfer.files)
+      .filter((file) => file.type === 'text/csv')
+      .forEach(async (file) => {
+        const text = await file.text();
+        const result: ParseResult<CsvObject> = await parse(text, {
+          header: true,
+          skipEmptyLines: false,
+          transformHeader: (h) => {
+            let regex = /\s/g;
+            return h.replace(regex, '');
+          },
+          complete: (results) => {
+            console.log('Parsing complete: \n', results);
+          },
+        });
+        this.setState({ stats: result.data });
+        console.log('this.state: ', this.state);
+      });
+  };
 
   render() {
     return (
@@ -46,8 +68,7 @@ class _App extends React.Component<AppProps, AppState> {
                     }}
                     onDrop={(e) => {
                       e.preventDefault();
-                      this.props.fetchStats(e);
-                      console.log('this.state: ', this.state);
+                      this.createStatsArray(e);
                     }}
                   >
                     DROP HERE
