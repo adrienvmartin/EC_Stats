@@ -9,7 +9,7 @@ import { Month, CsvObject, ParameterObject } from '../parser';
 // Create method to get the date of warmest high, rather than just using warmest high of each month
 export class Calculator {
   // Returns warmest number for a particular metric (max temp, low temp, etc.) within a given month
-  warmest = <K extends keyof CsvObject>(month: Month, key: K): number => {
+  warmest = <K extends keyof CsvObject>(month: CsvObject[], key: K): number => {
     const set: number[] = [];
     month.forEach((m) => {
       set.push(Number(m[key]));
