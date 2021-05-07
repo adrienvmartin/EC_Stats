@@ -1,5 +1,5 @@
-import { Month, CsvObject, ParameterObject, monthParser } from '../parser';
-import { AnalyzedMonth, StatObject } from '../datatypes';
+import { Month, CsvObject, monthParser } from '../parser';
+import { StatObject } from '../datatypes';
 
 // Make Calculator generic class and then pass in key when creating new instance?
 // e.g. const coldCalc = new Calculator('MinTempC'); etc.?
@@ -9,28 +9,56 @@ import { AnalyzedMonth, StatObject } from '../datatypes';
 //
 // Create method to get the date of warmest high, rather than just using warmest high of each month
 export class Calculator {
+  setter = <K extends keyof CsvObject>(set: CsvObject[], key: K): any => {
+    const arr: number[] = [];
+    set.forEach((s) => {
+      arr.push(Number(s[key]));
+    });
+
+    return arr;
+  };
   // Returns warmest number for a particular metric (max temp, low temp, etc.) within a given month
   warmest = <K extends keyof CsvObject>(month: CsvObject[], key: K): number => {
-    const set: number[] = [];
-    month.forEach((m) => {
-      set.push(Number(m[key]));
-    });
+    const set: number[] = this.setter(month, key);
     return Math.max(...set);
   };
-
+  // use full year array for extremes, use monthParser to get individual months and use those for averages
   monthlySummary = (set: CsvObject[]): any => {
     const year = monthParser(set);
-    const { Jan } = year;
+    const { Jan, Feb } = year;
 
-    return this.getAvg(Jan, 'MaxTemp(°C)').toFixed(1);
+    const janAvgHigh = this.getAvg(Jan, 'MaxTemp(°C)').toFixed(1);
+    const janAvgLow = this.getAvg(Jan, 'MinTemp(°C)').toFixed(1);
+    const janMean = this.getAvg(Jan, 'MeanTemp(°C)').toFixed(1);
+    const janPrecipTotal = this.getTotal(Jan, 'TotalPrecip(mm)').toFixed(1);
+
+    const febAvgHigh = this.getAvg(Feb, 'MaxTemp(°C)').toFixed(1);
+    const febAvgLow = this.getAvg(Feb, 'MinTemp(°C)').toFixed(1);
+    const febMean = this.getAvg(Jan, 'MeanTemp(°C)').toFixed(1);
+
+    return {
+      Jan: {
+        avgHigh: janAvgHigh,
+        avgLow: janAvgLow,
+        mean: janMean,
+        precipTotal: janPrecipTotal,
+      },
+      Feb: {
+        avgHigh: febAvgHigh,
+        avgLow: febAvgLow,
+        mean: febMean,
+      },
+    };
   };
 
   getAvg = <K extends keyof CsvObject>(month: CsvObject[], key: K): any => {
-    const set: number[] = [];
-    month.forEach((m) => {
-      set.push(Number(m[key]));
-    });
+    const set: number[] = this.setter(month, key);
     return set.reduce((a, b) => a + b, 0) / set.length;
+  };
+
+  getTotal = <K extends keyof CsvObject>(month: CsvObject[], key: K): any => {
+    const set: number[] = this.setter(month, key);
+    return set.reduce((a, b) => a + b, 0);
   };
 
   warmestEachMonth = (set: CsvObject[]): any => {
@@ -81,19 +109,13 @@ export class Calculator {
 
   // Returns coldest number for a particular metric (max temp, low temp, etc.) within a given month
   coldest = <K extends keyof CsvObject>(month: Month, key: K): number => {
-    const set: number[] = [];
-    month.forEach((m) => {
-      set.push(Number(m[key]));
-    });
+    const set: number[] = this.setter(month, key);
     return Math.min(...set);
   };
 
   // Returns the warmest number for each month of the year
-  dataEachMonth = <K extends keyof CsvObject>(year: Month[], key: K) => {
-    const yearArray: number[] = [];
-    year.forEach((y) => {
-      yearArray.push(this.warmest(y, key));
-    });
+  dataEachMonth = <K extends keyof CsvObject>(year: CsvObject[], key: K) => {
+    const yearArray: number[] = this.setter(year, key);
     return yearArray;
   };
 
@@ -102,13 +124,10 @@ export class Calculator {
     set: CsvObject[],
     key: K
   ): StatObject => {
-    const newArray: number[] = [];
+    const newArray: number[] = this.setter(set, key);
     let dateIndex;
     let warmestNumber;
     let warmestNumberDate;
-    set.forEach((s) => {
-      newArray.push(Number(s[key]));
-    });
     warmestNumber = Math.max(...newArray);
     dateIndex = newArray.indexOf(Math.max(...newArray));
     warmestNumberDate = set[dateIndex]['Date/Time'];
