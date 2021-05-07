@@ -82,6 +82,37 @@ export interface AnalyzedMonth {
   };
 }
 
+export interface StatObject {
+  value: number;
+  date: string;
+}
+
+export interface DataField {
+  high: StatObject;
+  low: StatObject;
+  mean: StatObject;
+}
+
+export interface MonthSummary {
+  warmest: DataField;
+  coldest: DataField;
+}
+
+export interface SummaryObject {
+  Jan: MonthSummary;
+  Feb: MonthSummary;
+  Mar: MonthSummary;
+  Apr: MonthSummary;
+  May: MonthSummary;
+  Jun: MonthSummary;
+  Jul: MonthSummary;
+  Aug: MonthSummary;
+  Sep: MonthSummary;
+  Oct: MonthSummary;
+  Nov: MonthSummary;
+  Dec: MonthSummary;
+}
+
 // Don't use full year/month array as it's unnecessary, instead get just the relevant values
 // e.g. warmest: { high: { Jan: '4.5', Feb: '7.2', Mar: '12.4' } }, etc.
 export interface AnalyzedData {
