@@ -82,6 +82,14 @@ export interface AnalyzedMonth {
   };
 }
 
+export interface MonthSummAvg {
+  avgHigh: number;
+  avgLow: number;
+  mean: number;
+  precipTotal: number;
+  precipDays: number;
+}
+
 export interface StatObject {
   value: number;
   date: string;
@@ -93,24 +101,26 @@ export interface DataField {
   mean: StatObject;
 }
 
-export interface MonthSummary {
+export interface MonthSummExtreme {
   warmest: DataField;
   coldest: DataField;
 }
 
+export type MonthSummary = MonthSummAvg | MonthSummExtreme;
+
 export interface SummaryObject {
-  Jan: MonthSummary;
-  Feb: MonthSummary;
-  Mar: MonthSummary;
-  Apr: MonthSummary;
-  May: MonthSummary;
-  Jun: MonthSummary;
-  Jul: MonthSummary;
-  Aug: MonthSummary;
-  Sep: MonthSummary;
-  Oct: MonthSummary;
-  Nov: MonthSummary;
-  Dec: MonthSummary;
+  Jan?: MonthSummary;
+  Feb?: MonthSummary;
+  Mar?: MonthSummary;
+  Apr?: MonthSummary;
+  May?: MonthSummary;
+  Jun?: MonthSummary;
+  Jul?: MonthSummary;
+  Aug?: MonthSummary;
+  Sep?: MonthSummary;
+  Oct?: MonthSummary;
+  Nov?: MonthSummary;
+  Dec?: MonthSummary;
 }
 
 // Don't use full year/month array as it's unnecessary, instead get just the relevant values
