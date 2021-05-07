@@ -1,4 +1,5 @@
-import { Month, CsvObject, ParameterObject } from '../parser';
+import { Month, CsvObject, ParameterObject, monthParser } from '../parser';
+import { AnalyzedMonth, StatObject } from '../datatypes';
 
 // Make Calculator generic class and then pass in key when creating new instance?
 // e.g. const coldCalc = new Calculator('MinTempC'); etc.?
@@ -15,6 +16,56 @@ export class Calculator {
       set.push(Number(m[key]));
     });
     return Math.max(...set);
+  };
+
+  monthlySummary = (set: CsvObject[]): any => {
+    const year = monthParser(set);
+    const { Jan } = year;
+
+    return this.getAvg(Jan, 'MaxTemp(°C)').toFixed(1);
+  };
+
+  getAvg = <K extends keyof CsvObject>(month: CsvObject[], key: K): any => {
+    const set: number[] = [];
+    month.forEach((m) => {
+      set.push(Number(m[key]));
+    });
+    return set.reduce((a, b) => a + b, 0) / set.length;
+  };
+
+  warmestEachMonth = (set: CsvObject[]): any => {
+    const year = monthParser(set);
+    const { Jan, Feb, Mar } = year;
+    const janWarmestHigh = this.specificDate(Jan, 'MaxTemp(°C)');
+    const janWarmestLow = this.specificDate(Jan, 'MinTemp(°C)');
+    const janWarmestMean = this.specificDate(Jan, 'MeanTemp(°C)');
+
+    const febWarmestHigh = this.specificDate(Feb, 'MaxTemp(°C)');
+    const febWarmestLow = this.specificDate(Feb, 'MinTemp(°C)');
+    const febWarmestMean = this.specificDate(Feb, 'MeanTemp(°C)');
+
+    const marWarmestHigh = this.specificDate(Mar, 'MaxTemp(°C)');
+    return {
+      Jan: {
+        warmest: {
+          high: janWarmestHigh,
+          low: janWarmestLow,
+          mean: janWarmestMean,
+        },
+      },
+      Feb: {
+        warmest: {
+          high: febWarmestHigh,
+          low: febWarmestLow,
+          mean: febWarmestMean,
+        },
+      },
+      Mar: {
+        warmest: {
+          high: marWarmestHigh,
+        },
+      },
+    };
   };
 
   fromYear = (year: CsvObject[]): number => {
@@ -50,7 +101,7 @@ export class Calculator {
   specificDate = <K extends keyof CsvObject>(
     set: CsvObject[],
     key: K
-  ): ParameterObject => {
+  ): StatObject => {
     const newArray: number[] = [];
     let dateIndex;
     let warmestNumber;
@@ -62,7 +113,6 @@ export class Calculator {
     dateIndex = newArray.indexOf(Math.max(...newArray));
     warmestNumberDate = set[dateIndex]['Date/Time'];
     return {
-      parameter: key,
       value: warmestNumber,
       date: warmestNumberDate,
     };
