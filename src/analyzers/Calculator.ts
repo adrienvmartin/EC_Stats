@@ -70,12 +70,39 @@ export class Calculator {
     month: CsvObject[]
   ): any /* will be MonthSummExtreme*/ => {
     return {
+      name: this.getMonthName(month),
       warmest: {
-        high: this.extremeData(month, 'MaxTemp(°C)').warmest.value,
-        low: this.extremeData(month, 'MinTemp(°C)'),
-        mean: this.extremeData(month, 'MeanTemp(°C)'),
+        high: {
+          value: this.extremeData(month, 'MaxTemp(°C)').warmest.value,
+          date: this.extremeData(month, 'MaxTemp(°C)').warmest.date,
+        },
+        low: {
+          value: this.extremeData(month, 'MinTemp(°C)').warmest.value,
+          date: this.extremeData(month, 'MinTemp(°C)').warmest.date,
+        },
+        mean: {
+          value: this.extremeData(month, 'MeanTemp(°C)').warmest.value,
+          date: this.extremeData(month, 'MeanTemp(°C)').warmest.date,
+        },
       },
-      precip: this.extremeData(month, 'TotalPrecip(mm)').precip,
+      coldest: {
+        high: {
+          value: this.extremeData(month, 'MaxTemp(°C)').coldest.value,
+          date: this.extremeData(month, 'MaxTemp(°C)').coldest.date,
+        },
+        low: {
+          value: this.extremeData(month, 'MinTemp(°C)').coldest.value,
+          date: this.extremeData(month, 'MinTemp(°C)').coldest.date,
+        },
+        mean: {
+          value: this.extremeData(month, 'MeanTemp(°C)').coldest.value,
+          date: this.extremeData(month, 'MeanTemp(°C)').coldest.date,
+        },
+      },
+      precip: {
+        value: this.extremeData(month, 'TotalPrecip(mm)').precip.value,
+        date: this.extremeData(month, 'TotalPrecip(mm)').precip.date,
+      },
     };
   };
 
@@ -110,6 +137,39 @@ export class Calculator {
       OctSummary,
       NovSummary,
       DecSummary,
+    ];
+  };
+
+  monthlyExtremes = (set: CsvObject[]): any => {
+    const year = monthParser(set);
+    const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
+
+    const JanExtremes = this.getMonthExtremes(Jan);
+    const FebExtremes = this.getMonthExtremes(Feb);
+    const MarExtremes = this.getMonthExtremes(Mar);
+    const AprExtremes = this.getMonthExtremes(Apr);
+    const MayExtremes = this.getMonthExtremes(May);
+    const JunExtremes = this.getMonthExtremes(Jun);
+    const JulExtremes = this.getMonthExtremes(Jul);
+    const AugExtremes = this.getMonthExtremes(Aug);
+    const SepExtremes = this.getMonthExtremes(Sep);
+    const OctExtremes = this.getMonthExtremes(Oct);
+    const NovExtremes = this.getMonthExtremes(Nov);
+    const DecExtremes = this.getMonthExtremes(Dec);
+
+    return [
+      JanExtremes,
+      FebExtremes,
+      MarExtremes,
+      AprExtremes,
+      MayExtremes,
+      JunExtremes,
+      JulExtremes,
+      AugExtremes,
+      SepExtremes,
+      OctExtremes,
+      NovExtremes,
+      DecExtremes,
     ];
   };
 
