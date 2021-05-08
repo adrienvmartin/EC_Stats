@@ -83,22 +83,22 @@ export class App extends React.Component<{}, AppState> {
     const { warmest, coldest, precip } = summary.extremes;
     return (
       <div key={Math.random()}>
-        The warmest high was {warmest.high.value}°C on{' '}
-        {dayjs(warmest.high.date).format('MMMM D')}.
+        Warmest high: {warmest.high.value}°C (
+        {dayjs(warmest.high.date).format('MMMM D')})
         <br />
-        The warmest low was {warmest.low.value}°C on{' '}
-        {dayjs(warmest.low.date).format('MMMM D')}.
-        <br />
-        <br />
-        The coldest high was {coldest.high.value}°C on{' '}
-        {dayjs(coldest.high.date).format('MMMM D')}.
-        <br />
-        The coldest low was {coldest.low.value}°C on{' '}
-        {dayjs(coldest.low.date).format('MMMM D')}.
+        Warmest low: {warmest.low.value}°C (
+        {dayjs(warmest.low.date).format('MMMM D')})
         <br />
         <br />
-        The highest precipitation amount was {precip.value}mm on{' '}
-        {dayjs(precip.date).format('MMMM D')}
+        Coldest high: {coldest.high.value}°C (
+        {dayjs(coldest.high.date).format('MMMM D')})
+        <br />
+        Coldest low: {coldest.low.value}°C (
+        {dayjs(coldest.low.date).format('MMMM D')})
+        <br />
+        <br />
+        Highest precipitation: {precip.value}mm (
+        {dayjs(precip.date).format('MMMM D')})
       </div>
     );
   };
@@ -129,25 +129,19 @@ export class App extends React.Component<{}, AppState> {
     return summary.map((s: StatsObject) => {
       console.log(s);
       return (
-        <div>
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="flex-start"
-          >
-            <Paper style={{ padding: 20 }}>
-              <Grid item xs={12}>
-                {this.renderSummary(s)}
-              </Grid>
-              <Grid item xs={12}>
-                {this.renderExtremes(s)}
-              </Grid>
-            </Paper>
-            <br />
-            <br />
-          </Grid>
-        </div>
+        <Paper
+          style={{
+            padding: 30,
+            marginLeft: 30,
+            marginRight: 30,
+            marginBottom: 50,
+            width: 400,
+          }}
+        >
+          {this.renderSummary(s)}
+          {''}
+          {this.renderExtremes(s)}
+        </Paper>
       );
     });
   };
@@ -193,14 +187,16 @@ export class App extends React.Component<{}, AppState> {
           <br />
           <br />
           <br />
-          {this.state.stats ? this.renderStats(this.state.stats) : null}
         </Grid>
         <Grid
           container
-          direction="column"
-          justify="flex-start"
+          direction="row"
+          justify="space-evenly"
           alignItems="center"
-        ></Grid>
+          spacing={3}
+        >
+          {this.state.stats ? this.renderStats(this.state.stats) : null}
+        </Grid>
       </React.Fragment>
     );
   }
