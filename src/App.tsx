@@ -2,7 +2,12 @@ import React, { Fragment } from 'react';
 import { CsvObject } from './parser';
 import { parse, ParseResult } from 'papaparse';
 import { Calculator } from './analyzers/Calculator';
-import { MonthSummary, MonthExtremeSum } from './datatypes';
+import {
+  MonthSummary,
+  MonthExtremeSum,
+  StatsObject,
+  YearStats,
+} from './datatypes';
 import { Grid, Paper } from '@material-ui/core';
 import dayjs from 'dayjs';
 
@@ -23,16 +28,14 @@ const style = {
 interface AppState {
   year?: CsvObject[];
   loaded: boolean;
-  summary?: any;
-  extremes?: any;
+  stats: any;
 }
 
 export class App extends React.Component<{}, AppState> {
   state: AppState = {
     loaded: false,
-    summary: [],
     year: [],
-    extremes: [],
+    stats: [],
   };
 
   componentDidMount() {
@@ -64,10 +67,10 @@ export class App extends React.Component<{}, AppState> {
     e.preventDefault();
     const calc = new Calculator();
     if (this.state.year !== undefined) {
-      const summary = calc.monthlySummary(this.state.year);
-      const extremes = calc.monthlyExtremes(this.state.year);
-      this.setState({ summary, extremes }, () => {
+      const stats = calc.getYearStats(this.state.year);
+      this.setState({ stats }, () => {
         console.log('Stats generated!');
+        console.log(this.state.stats);
       });
     }
   };
@@ -76,81 +79,82 @@ export class App extends React.Component<{}, AppState> {
     this.setState({
       loaded: false,
       year: undefined,
-      summary: undefined,
+      stats: undefined,
     });
     console.clear();
   };
 
-  renderExtremes = (): JSX.Element => {
-    return this.state.extremes.map((s: MonthExtremeSum) => {
-      return (
-        <div key={Math.random()}>
-          <Grid container>
-            <Grid item lg={12}>
-              <Paper elevation={3} style={{ padding: 20 }}>
-                <div>{s.name}</div>
-                <br />
-                The warmest high was {s.warmest.high.value}°C on{' '}
-                {dayjs(s.warmest.high.date).format('MMMM D')}.
-                <br />
-                The warmest low was {s.warmest.low.value}°C on{' '}
-                {dayjs(s.warmest.low.date).format('MMMM D')}.
-                <br />
-                <br />
-                The coldest high was {s.coldest.high.value}°C on{' '}
-                {dayjs(s.coldest.high.date).format('MMMM D')}.
-                <br />
-                The coldest low was {s.coldest.low.value}°C on{' '}
-                {dayjs(s.coldest.low.date).format('MMMM D')}.
-                <br />
-                <br />
-                The highest precipitation amount was {s.precip.value}mm on{' '}
-                {dayjs(s.precip.date).format('MMMM D')}
-              </Paper>
-            </Grid>
-          </Grid>
-        </div>
-      );
-    });
-  };
-
-  renderSummary = (): JSX.Element => {
-    return this.state.summary.map((s: MonthSummary) => {
-      return (
-        <div key={Math.random()}>
-          <Grid container>
-            <Grid item lg={12}>
-              <Paper elevation={3} style={{ padding: 20 }}>
-                <div>
-                  <h1>{s.name}</h1>
-                  This is your summary for the month of {s.name}.
-                </div>
-                <br />
-                Average high: {s.avgHigh}
-                <br />
-                Average low: {s.avgLow}
-                <br />
-                Mean temp: {s.mean}
-                <br />
-                Precipitation (mm): {s.precipTotal} <br />
-                Precipitation days: {s.precipDays}
-                <br />
-              </Paper>
-            </Grid>
-          </Grid>
-          <br />
-        </div>
-      );
-    });
-  };
-
-  renderStats = (): any => {
-    console.log('stats rendered');
+  renderExtremes = (summary: StatsObject): any => {
+    const { warmest, coldest, precip } = summary.extremes;
     return (
-      <Fragment>
-        <div>{this.renderExtremes()}</div>
-      </Fragment>
+      <div key={Math.random()}>
+        The warmest high was {warmest.high.value}°C on{' '}
+        {dayjs(warmest.high.date).format('MMMM D')}.
+        <br />
+        The warmest low was {warmest.low.value}°C on{' '}
+        {dayjs(warmest.low.date).format('MMMM D')}.
+        <br />
+        <br />
+        The coldest high was {coldest.high.value}°C on{' '}
+        {dayjs(coldest.high.date).format('MMMM D')}.
+        <br />
+        The coldest low was {coldest.low.value}°C on{' '}
+        {dayjs(coldest.low.date).format('MMMM D')}.
+        <br />
+        <br />
+        The highest precipitation amount was {precip.value}mm on{' '}
+        {dayjs(precip.date).format('MMMM D')}
+      </div>
     );
+  };
+
+  renderSummary = (stats: StatsObject): any => {
+    const { summary } = stats;
+    return (
+      <div key={Math.random()}>
+        <div>
+          <h1>{summary.name}</h1>
+        </div>
+        <br />
+        Average high: {summary.avgHigh}°C
+        <br />
+        Average low: {summary.avgLow}°C
+        <br />
+        Mean temp: {summary.mean}°C
+        <br />
+        Precipitation (mm): {summary.precipTotal}mm <br />
+        Precipitation days: {summary.precipDays}
+        <br />
+        <br />
+      </div>
+    );
+  };
+
+  renderStats = (summary: YearStats): any => {
+    return summary.map((s: StatsObject) => {
+      console.log(s);
+      return (
+        <div>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="flex-start"
+          >
+            <Paper style={{ padding: 20 }}>
+              <Grid item xs={12}>
+                {this.renderSummary(s)}
+              </Grid>
+              <Grid item xs={12}>
+                {this.renderExtremes(s)}
+              </Grid>
+            </Paper>
+            <br />
+            <br />
+          </Grid>
+        </div>
+      );
+    });
   };
 
   render() {
@@ -194,15 +198,14 @@ export class App extends React.Component<{}, AppState> {
           <br />
           <br />
           <br />
+          {this.state.stats ? this.renderStats(this.state.stats) : null}
         </Grid>
         <Grid
           container
           direction="column"
           justify="flex-start"
           alignItems="center"
-        >
-          {this.state.extremes ? this.renderExtremes() : null}
-        </Grid>
+        ></Grid>
       </React.Fragment>
     );
   }
