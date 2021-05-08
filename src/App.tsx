@@ -8,18 +8,25 @@ import { MonthSummary } from './datatypes';
 interface AppState {
   year?: CsvObject[];
   loaded: boolean;
+  highlighted: boolean;
   summary?: any;
 }
 
 export class App extends React.Component<{}, AppState> {
   state: AppState = {
     loaded: false,
+    highlighted: false,
     summary: [],
     year: [],
   };
 
   componentDidMount() {
     console.clear();
+  }
+
+  componentWillUnmount() {
+    console.clear();
+    this.setState({});
   }
 
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
@@ -50,10 +57,8 @@ export class App extends React.Component<{}, AppState> {
       const summary = calc.monthlySummary(this.state.year);
       this.setState({ summary }, () => {
         console.log('this.state: ', this.state);
-        // calc.renderStats(summary);
         this.renderStats();
       });
-      // console.log('warmestEachMonth: ', calc.warmestEachMonth(this.state.year));
     }
   };
 
@@ -70,22 +75,27 @@ export class App extends React.Component<{}, AppState> {
     console.log('stats rendered');
     return this.state.summary.map((s: MonthSummary) => {
       return (
-        <div>
-          <Row>
-            <Col md={22}>
-              <Card>
-                <Card.Body>
-                  <h1>{s.name}</h1>
-                  Average high: {s.avgHigh}
-                  <br />
-                  Average low: {s.avgLow}
-                  <br />
-                  Mean temp: {s.mean}
-                </Card.Body>
-              </Card>
+        <Container>
+          <Card>
+            <div>
+              <h1>{s.name}</h1>
+            </div>
+            <Col xs={3}>
+              Average high: {s.avgHigh}
+              <br />
+              Mean temp: {s.mean}
+              <br />
+              Average low: {s.avgLow}
+              <br />
             </Col>
-          </Row>
-        </div>
+            <Col md={7}>
+              Precipitation (mm): {s.precipTotal}
+              <br />
+              Precipitation days: {s.precipDays}
+            </Col>
+          </Card>
+          <br />
+        </Container>
       );
     });
   };
@@ -107,7 +117,7 @@ export class App extends React.Component<{}, AppState> {
         {/*******************/}
         <Row className="justify-content-md-center">
           <Col></Col>
-          <Col>
+          <Col md="auto">
             <Card>
               <Card.Body>
                 <form>
@@ -120,18 +130,12 @@ export class App extends React.Component<{}, AppState> {
                       this.createStatsArray(e);
                     }}
                   >
-                    Drop CSV File Here
+                    {this.state.loaded
+                      ? 'Click below to generate'
+                      : 'Drag & Drop CSV File Here'}
                   </div>
                 </form>
               </Card.Body>
-            </Card>
-            <br />
-            <Card>
-              <div>
-                {this.state.loaded
-                  ? 'Click below to generate'
-                  : 'Please load CSV file'}
-              </div>
             </Card>
             <br />
             <Card>
@@ -143,12 +147,12 @@ export class App extends React.Component<{}, AppState> {
                 <button onClick={this.clearCsv}>Clear CSV</button>
               </Card.Body>
             </Card>
-            {this.state.summary ? this.renderStats() : null}
             <br />
             <br />
           </Col>
           <Col></Col>
         </Row>
+        <Row>{this.state.summary ? this.renderStats() : null}</Row>
         <br />
       </Container>
     );
