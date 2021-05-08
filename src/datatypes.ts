@@ -49,40 +49,7 @@ export interface Year {
   Dec: Month;
 }
 
-export type FullYear = Month[];
-
-export interface AnalyzedMonth {
-  warmest: {
-    high: {
-      value: string;
-      date: string;
-    };
-    low: {
-      value: string;
-      date: string;
-    };
-    mean: {
-      value: string;
-      date: string;
-    };
-  };
-  coldest: {
-    high: {
-      value: string;
-      date: string;
-    };
-    low: {
-      value: string;
-      date: string;
-    };
-    mean: {
-      value: string;
-      date: string;
-    };
-  };
-}
-
-export interface MonthSummAvg {
+export interface MonthSummary {
   avgHigh: number;
   avgLow: number;
   mean: number;
@@ -106,34 +73,17 @@ export interface MonthSummExtreme {
   coldest: DataField;
 }
 
-export type MonthSummary = MonthSummAvg | MonthSummExtreme;
-
 export interface SummaryObject {
-  Jan?: MonthSummary;
-  Feb?: MonthSummary;
-  Mar?: MonthSummary;
-  Apr?: MonthSummary;
-  May?: MonthSummary;
-  Jun?: MonthSummary;
-  Jul?: MonthSummary;
-  Aug?: MonthSummary;
-  Sep?: MonthSummary;
-  Oct?: MonthSummary;
-  Nov?: MonthSummary;
-  Dec?: MonthSummary;
-}
-
-// Don't use full year/month array as it's unnecessary, instead get just the relevant values
-// e.g. warmest: { high: { Jan: '4.5', Feb: '7.2', Mar: '12.4' } }, etc.
-export interface AnalyzedData {
-  warmest?: {
-    high?: Year;
-    low?: Year;
-    mean?: Year;
-  };
-  coldest?: {
-    high?: Year;
-    low?: Year;
-    mean?: Year;
-  };
+  Jan: MonthSummary;
+  Feb: MonthSummary;
+  Mar: MonthSummary;
+  Apr: MonthSummary;
+  May: MonthSummary;
+  Jun: MonthSummary;
+  Jul: MonthSummary;
+  Aug: MonthSummary;
+  Sep: MonthSummary;
+  Oct: MonthSummary;
+  Nov: MonthSummary;
+  Dec: MonthSummary;
 }
