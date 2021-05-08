@@ -7,13 +7,13 @@ import { Calculator } from './analyzers/Calculator';
 interface AppState {
   year?: CsvObject[];
   loaded: boolean;
-  stats?: any;
+  summary?: any;
 }
 
 export class App extends React.Component<{}, AppState> {
   state: AppState = {
     loaded: false,
-    stats: [],
+    summary: [],
     year: [],
   };
 
@@ -42,11 +42,11 @@ export class App extends React.Component<{}, AppState> {
     e.preventDefault();
     const calc = new Calculator();
     if (this.state.year !== undefined) {
-      const summary = calc.warmestEachMonth(this.state.year);
-      this.setState({ stats: summary }, () => {
+      const summary = calc.monthlySummary(this.state.year);
+      this.setState({ summary }, () => {
         console.log('this.state: ', this.state);
+        calc.renderStats(summary);
       });
-      console.log('getAvg: ', calc.monthlySummary(this.state.year));
       // console.log('warmestEachMonth: ', calc.warmestEachMonth(this.state.year));
     }
   };
@@ -55,12 +55,12 @@ export class App extends React.Component<{}, AppState> {
     this.setState({
       loaded: false,
       year: undefined,
-      stats: undefined,
+      summary: undefined,
     });
+    console.clear();
   };
 
   render() {
-    const { Jan } = this.state.stats;
     return (
       <Container>
         {/* HEADER SECTION */}
@@ -115,16 +115,6 @@ export class App extends React.Component<{}, AppState> {
             </Card>
             <br />
             <br />
-            <Card>
-              <Card.Body>
-                {this.state.stats.Jan !== undefined ? (
-                  <div>
-                    The warmest high in January was {Jan.warmest.high.value}°C
-                    on {Jan.warmest.high.date}
-                  </div>
-                ) : null}
-              </Card.Body>
-            </Card>
           </Col>
           <Col></Col>
         </Row>
