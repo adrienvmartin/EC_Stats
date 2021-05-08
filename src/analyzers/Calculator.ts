@@ -1,5 +1,5 @@
 import { monthParser } from '../parser';
-import { MonthSummary, CsvObject } from '../datatypes';
+import { MonthSummary, CsvObject, MonthExtremeSum } from '../datatypes';
 import dayjs from 'dayjs';
 
 export class Calculator {
@@ -68,9 +68,7 @@ export class Calculator {
   };
 
   // Returns a summary of temperature & precipitation extremes throughout the month
-  getMonthExtremes = (
-    month: CsvObject[]
-  ): any /* will be MonthSummExtreme*/ => {
+  getMonthExtremes = (month: CsvObject[]): MonthExtremeSum => {
     return {
       name: this.getMonthName(month),
       warmest: {
@@ -142,7 +140,7 @@ export class Calculator {
     ];
   };
 
-  monthlyExtremes = (set: CsvObject[]): MonthSummary[] => {
+  monthlyExtremes = (set: CsvObject[]): MonthExtremeSum[] => {
     const year = monthParser(set);
     const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
 
