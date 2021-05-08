@@ -50,6 +50,7 @@ export interface Year {
 }
 
 export interface MonthSummary {
+  name: string;
   avgHigh: number;
   avgLow: number;
   mean: number;
@@ -73,17 +74,4 @@ export interface MonthSummExtreme {
   coldest: DataField;
 }
 
-export interface SummaryObject {
-  Jan: MonthSummary;
-  Feb: MonthSummary;
-  Mar: MonthSummary;
-  Apr: MonthSummary;
-  May: MonthSummary;
-  Jun: MonthSummary;
-  Jul: MonthSummary;
-  Aug: MonthSummary;
-  Sep: MonthSummary;
-  Oct: MonthSummary;
-  Nov: MonthSummary;
-  Dec: MonthSummary;
-}
+export type SummaryObject = MonthSummary[];
