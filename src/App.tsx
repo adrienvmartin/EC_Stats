@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
 import { CsvObject } from './parser';
 import { parse, ParseResult } from 'papaparse';
 import { Calculator } from './analyzers/Calculator';
 import { MonthSummary } from './datatypes';
+import { Container, Grid, Paper } from '@material-ui/core';
 
 interface AppState {
   year?: CsvObject[];
@@ -22,11 +22,6 @@ export class App extends React.Component<{}, AppState> {
 
   componentDidMount() {
     console.clear();
-  }
-
-  componentWillUnmount() {
-    console.clear();
-    this.setState({});
   }
 
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
@@ -56,8 +51,9 @@ export class App extends React.Component<{}, AppState> {
     if (this.state.year !== undefined) {
       const summary = calc.monthlySummary(this.state.year);
       this.setState({ summary }, () => {
-        console.log('this.state: ', this.state);
-        this.renderStats();
+        // console.log('this.state: ', this.state);
+        // this.renderStats();
+        console.log('Stats generated!');
       });
     }
   };
@@ -75,86 +71,79 @@ export class App extends React.Component<{}, AppState> {
     console.log('stats rendered');
     return this.state.summary.map((s: MonthSummary) => {
       return (
-        <Container>
-          <Card>
-            <div>
-              <h1>{s.name}</h1>
-            </div>
-            <Col xs={3}>
-              Average high: {s.avgHigh}
-              <br />
-              Mean temp: {s.mean}
-              <br />
-              Average low: {s.avgLow}
-              <br />
-            </Col>
-            <Col md={7}>
-              Precipitation (mm): {s.precipTotal}
-              <br />
-              Precipitation days: {s.precipDays}
-            </Col>
-          </Card>
+        <div>
+          <div key={Math.random()}>
+            <h1>{s.name}</h1>
+          </div>
+          Average high: {s.avgHigh}
           <br />
-        </Container>
+          Mean temp: {s.mean}
+          <br />
+          Average low: {s.avgLow}
+          <br />
+          Precipitation (mm): {s.precipTotal}
+          <br />
+          Precipitation days: {s.precipDays}
+          <br />
+        </div>
       );
     });
   };
 
   render() {
+    const style = {
+      fileDropper: {
+        padding: 12,
+        alignItems: 'center',
+        borderStyle: 'solid',
+      },
+      highlighted: {
+        backgroundColor: 'blue',
+      },
+    };
     return (
-      <Container>
-        {/* HEADER SECTION */}
-        {/******************/}
-        <Row className="justify-content-md-center">
-          <Col></Col>
-          <Col md={8}>
-            <h1>Environment Canada CSV File Parser</h1>
-          </Col>
-          <Col></Col>
-        </Row>
-        <br />
-        {/* CSV SELECTION */}
-        {/*******************/}
-        <Row className="justify-content-md-center">
-          <Col></Col>
-          <Col md="auto">
-            <Card>
-              <Card.Body>
-                <form>
-                  <div
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      this.createStatsArray(e);
-                    }}
-                  >
-                    {this.state.loaded
-                      ? 'Click below to generate'
-                      : 'Drag & Drop CSV File Here'}
-                  </div>
-                </form>
-              </Card.Body>
-            </Card>
-            <br />
-            <Card>
-              <Card.Body>
-                <button onClick={(e) => this.generateStats(e)}>
-                  Generate Stats
-                </button>
-                {'   '}
-                <button onClick={this.clearCsv}>Clear CSV</button>
-              </Card.Body>
-            </Card>
-            <br />
-            <br />
-          </Col>
-          <Col></Col>
-        </Row>
-        <Row>{this.state.summary ? this.renderStats() : null}</Row>
-        <br />
-      </Container>
+      <React.Fragment>
+        <Grid container direction="column" justify="center" alignItems="center">
+          {/* HEADER SECTION */}
+          {/******************/}
+
+          <h1>Environment Canada CSV File Parser</h1>
+
+          <br />
+          {/* CSV SELECTION */}
+          {/*******************/}
+          <Paper>
+            <form>
+              <div
+                style={style.fileDropper}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  this.createStatsArray(e);
+                }}
+              >
+                {this.state.loaded
+                  ? 'Click below to generate'
+                  : 'Drag & Drop CSV File Here'}
+              </div>
+            </form>
+          </Paper>
+          <br />
+          <Paper>
+            <button onClick={(e) => this.generateStats(e)}>
+              Generate Stats
+            </button>
+            {'   '}
+            <button onClick={this.clearCsv}>Clear CSV</button>
+          </Paper>
+          <br />
+          <br />
+          <br />
+        </Grid>
+        <Grid>{this.state.summary ? this.renderStats() : null}</Grid>
+      </React.Fragment>
     );
   }
 }
