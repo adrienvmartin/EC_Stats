@@ -1,13 +1,6 @@
 import { Month, CsvObject, monthParser } from '../parser';
 import { MonthSummary, MonthSummExtreme, SummaryObject } from '../datatypes';
 
-// Make Calculator generic class and then pass in key when creating new instance?
-// e.g. const coldCalc = new Calculator('MinTempC'); etc.?
-// Define key-value pair somewhere as such - checkbox key : CsvObject key
-//                                          (e.g. maxtemp: 'MaxTemp(C)')
-// Which is then used when the user selects which data they'd like
-//
-// Create method to get the date of warmest high, rather than just using warmest high of each month
 export class Calculator {
   setter = <K extends keyof CsvObject>(set: CsvObject[], key: K): any => {
     const arr: number[] = [];
@@ -17,6 +10,7 @@ export class Calculator {
 
     return arr;
   };
+
   // Returns warmest number for a particular metric (max temp, low temp, etc.) within a given month
   warmest = <K extends keyof CsvObject>(month: CsvObject[], key: K): number => {
     const set: number[] = this.setter(month, key);
@@ -29,16 +23,19 @@ export class Calculator {
     return Math.min(...set);
   };
 
+  // Returns the average of a given set
   getAvg = <K extends keyof CsvObject>(month: CsvObject[], key: K): any => {
     const set: number[] = this.setter(month, key);
     return set.reduce((a, b) => a + b, 0) / set.length;
   };
 
+  // Returns the total of a given set
   getTotal = <K extends keyof CsvObject>(month: CsvObject[], key: K): any => {
     const set: number[] = this.setter(month, key);
     return set.reduce((a, b) => a + b, 0);
   };
 
+  // Returns the number of days with measureable precipitation
   getPrecipDays = <K extends keyof CsvObject>(
     month: CsvObject[],
     key: K
@@ -50,6 +47,7 @@ export class Calculator {
     return count;
   };
 
+  // Returns a summary of temperature averages & precipitation totals/days for a given month
   getMonthSummary = (month: CsvObject[]): MonthSummary => {
     return {
       avgHigh: this.getAvg(month, 'MaxTemp(°C)').toFixed(1),
@@ -60,6 +58,7 @@ export class Calculator {
     };
   };
 
+  // Returns a summary of temperature & precipitation extremes throughout the month
   getMonthExtremes = (
     month: CsvObject[]
   ): any /* will be MonthSummExtreme*/ => {
@@ -73,7 +72,7 @@ export class Calculator {
     };
   };
 
-  // use full year array for extremes, use monthParser to get individual months and use those for averages
+  // Returns a year's worth of monthly summaries
   monthlySummary = (set: CsvObject[]): any => {
     const year = monthParser(set);
     const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
@@ -113,6 +112,7 @@ export class Calculator {
     return yearArray;
   };
 
+  // Returns the extreme highs for a given month
   extremeHighs = (set: CsvObject[]): any => {
     const highs = this.setter(set, 'MaxTemp(°C)');
 
@@ -142,7 +142,7 @@ export class Calculator {
     };
   };
 
-  // Return the date of the warmest high
+  // Returns the warmest and coldest highs for a given month
   extremeData = <K extends keyof CsvObject>(set: CsvObject[], key: K): any => {
     const newArray: number[] = this.setter(set, key);
     let warmDateIndex;
@@ -182,6 +182,7 @@ export class Calculator {
     };
   };
 
+  // Renders the stats
   renderStats = (avg: SummaryObject, xtr?: MonthSummExtreme): any => {
     console.log(
       `January: \n Average high: ${avg.Jan.avgHigh} \n Average low: ${avg.Jan.avgLow} \n Mean: ${avg.Jan.mean} \n Precipitation totals: ${avg.Jan.precipTotal} \n Precipitation days: ${avg.Jan.precipDays}`
