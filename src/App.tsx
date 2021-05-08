@@ -3,6 +3,7 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import { CsvObject } from './parser';
 import { parse, ParseResult } from 'papaparse';
 import { Calculator } from './analyzers/Calculator';
+import { MonthSummary } from './datatypes';
 
 interface AppState {
   year?: CsvObject[];
@@ -16,6 +17,10 @@ export class App extends React.Component<{}, AppState> {
     summary: [],
     year: [],
   };
+
+  componentDidMount() {
+    console.clear();
+  }
 
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
     Array.from(e.dataTransfer.files)
@@ -45,7 +50,8 @@ export class App extends React.Component<{}, AppState> {
       const summary = calc.monthlySummary(this.state.year);
       this.setState({ summary }, () => {
         console.log('this.state: ', this.state);
-        calc.renderStats(summary);
+        // calc.renderStats(summary);
+        this.renderStats();
       });
       // console.log('warmestEachMonth: ', calc.warmestEachMonth(this.state.year));
     }
@@ -58,6 +64,12 @@ export class App extends React.Component<{}, AppState> {
       summary: undefined,
     });
     console.clear();
+  };
+
+  renderStats = (): any => {
+    this.state.summary.forEach((s: MonthSummary) => {
+      console.log(`${s.name}: \n Average high: ${s.avgHigh}`);
+    });
   };
 
   render() {
