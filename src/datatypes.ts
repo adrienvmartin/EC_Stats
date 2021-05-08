@@ -77,3 +77,12 @@ export interface MonthExtremeSum {
 }
 
 export type SummaryObject = MonthSummary[];
+
+export type MonthSumType = MonthSummary | MonthExtremeSum;
+
+export type StatsObject = {
+  summary: MonthSummary;
+  extremes: MonthExtremeSum;
+};
+
+export type YearStats = StatsObject[];

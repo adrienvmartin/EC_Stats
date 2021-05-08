@@ -6,7 +6,9 @@ export class Calculator {
   setter = <K extends keyof CsvObject>(set: CsvObject[], key: K): any => {
     const arr: number[] = [];
     set.forEach((s) => {
-      arr.push(Number(s[key]));
+      if (s[key] !== '') {
+        arr.push(Number(s[key]));
+      }
     });
 
     return arr;
@@ -107,7 +109,7 @@ export class Calculator {
   };
 
   // Returns a year's worth of monthly summaries
-  monthlySummary = (set: CsvObject[]): any => {
+  monthlySummary = (set: CsvObject[]): MonthSummary[] => {
     const year = monthParser(set);
     const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
 
@@ -140,7 +142,7 @@ export class Calculator {
     ];
   };
 
-  monthlyExtremes = (set: CsvObject[]): any => {
+  monthlyExtremes = (set: CsvObject[]): MonthSummary[] => {
     const year = monthParser(set);
     const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
 
@@ -171,6 +173,17 @@ export class Calculator {
       NovExtremes,
       DecExtremes,
     ];
+  };
+
+  // Return an array of objects containing each month's average and extreme values
+  getYearStats = (set: CsvObject[]): any => {
+    const summary = this.monthlySummary(set);
+    const extremes = this.monthlyExtremes(set);
+    const statsArr = [];
+    for (let i = 0; i < summary.length; i++) {
+      statsArr.push({ summary: summary[i], extremes: extremes[i] });
+    }
+    return statsArr;
   };
 
   // Returns the extreme highs for a given month
