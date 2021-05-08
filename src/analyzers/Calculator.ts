@@ -1,5 +1,6 @@
 import { Month, CsvObject, monthParser } from '../parser';
 import { MonthSummary, MonthSummExtreme, SummaryObject } from '../datatypes';
+import dayjs from 'dayjs';
 
 export class Calculator {
   setter = <K extends keyof CsvObject>(set: CsvObject[], key: K): any => {
@@ -47,9 +48,14 @@ export class Calculator {
     return count;
   };
 
+  getMonthName = (set: CsvObject[]): any => {
+    return dayjs(set[0].Month).format('MMMM');
+  };
+
   // Returns a summary of temperature averages & precipitation totals/days for a given month
   getMonthSummary = (month: CsvObject[]): MonthSummary => {
     return {
+      name: this.getMonthName(month),
       avgHigh: this.getAvg(month, 'MaxTemp(°C)').toFixed(1),
       avgLow: this.getAvg(month, 'MinTemp(°C)').toFixed(1),
       mean: this.getAvg(month, 'MeanTemp(°C)').toFixed(1),
@@ -90,26 +96,20 @@ export class Calculator {
     const NovSummary: MonthSummary = this.getMonthSummary(Nov);
     const DecSummary: MonthSummary = this.getMonthSummary(Dec);
 
-    return {
-      Jan: JanSummary,
-      Feb: FebSummary,
-      Mar: MarSummary,
-      Apr: AprSummary,
-      May: MaySummary,
-      Jun: JunSummary,
-      Jul: JulSummary,
-      Aug: AugSummary,
-      Sep: SepSummary,
-      Oct: OctSummary,
-      Nov: NovSummary,
-      Dec: DecSummary,
-    };
-  };
-
-  // Returns the warmest number for each month of the year
-  dataEachMonth = <K extends keyof CsvObject>(year: CsvObject[], key: K) => {
-    const yearArray: number[] = this.setter(year, key);
-    return yearArray;
+    return [
+      JanSummary,
+      FebSummary,
+      MarSummary,
+      AprSummary,
+      MaySummary,
+      JunSummary,
+      JulSummary,
+      AugSummary,
+      SepSummary,
+      OctSummary,
+      NovSummary,
+      DecSummary,
+    ];
   };
 
   // Returns the extreme highs for a given month
@@ -183,12 +183,17 @@ export class Calculator {
   };
 
   // Renders the stats
-  renderStats = (avg: SummaryObject, xtr?: MonthSummExtreme): any => {
-    console.log(
+  /*renderStats = (avg: SummaryObject, xtr?: MonthSummExtreme): any => {
+    avg.forEach((a) => {
+      console.log(`${a.name}: \n`);
+      console.log('Average high: ', a.avgHigh);
+    });
+  };
+  console.log(
       `January: \n Average high: ${avg.Jan.avgHigh} \n Average low: ${avg.Jan.avgLow} \n Mean: ${avg.Jan.mean} \n Precipitation totals: ${avg.Jan.precipTotal} \n Precipitation days: ${avg.Jan.precipDays}`
     );
     console.log(
       `February: \n Average high: ${avg.Feb.avgHigh} \n Average low: ${avg.Feb.avgLow} \n Mean: ${avg.Feb.mean} \n Precipitation totals: ${avg.Feb.precipTotal} \n Precipitation days: ${avg.Feb.precipDays}`
     );
-  };
+  };*/
 }
