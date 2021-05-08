@@ -1,11 +1,5 @@
 import { Month, CsvObject, monthParser } from '../parser';
-import {
-  StatObject,
-  MonthSummary,
-  Year,
-  MonthSummExtreme,
-  MonthSummAvg,
-} from '../datatypes';
+import { MonthSummary, MonthSummExtreme, SummaryObject } from '../datatypes';
 
 // Make Calculator generic class and then pass in key when creating new instance?
 // e.g. const coldCalc = new Calculator('MinTempC'); etc.?
@@ -56,13 +50,26 @@ export class Calculator {
     return count;
   };
 
-  getMonthSummary = (month: CsvObject[]): MonthSummAvg => {
+  getMonthSummary = (month: CsvObject[]): MonthSummary => {
     return {
       avgHigh: this.getAvg(month, 'MaxTemp(°C)').toFixed(1),
       avgLow: this.getAvg(month, 'MinTemp(°C)').toFixed(1),
       mean: this.getAvg(month, 'MeanTemp(°C)').toFixed(1),
       precipTotal: this.getTotal(month, 'TotalPrecip(mm)').toFixed(1),
       precipDays: this.getPrecipDays(month, 'TotalPrecip(mm)'),
+    };
+  };
+
+  getMonthExtremes = (
+    month: CsvObject[]
+  ): any /* will be MonthSummExtreme*/ => {
+    return {
+      warmest: {
+        high: this.extremeData(month, 'MaxTemp(°C)').warmest.value,
+        low: this.extremeData(month, 'MinTemp(°C)'),
+        mean: this.extremeData(month, 'MeanTemp(°C)'),
+      },
+      precip: this.extremeData(month, 'TotalPrecip(mm)').precip,
     };
   };
 
@@ -100,62 +107,87 @@ export class Calculator {
     };
   };
 
-  warmestEachMonth = (set: CsvObject[]): any => {
-    const year = monthParser(set);
-    const { Jan, Feb, Mar } = year;
-    const janWarmestHigh = this.extremeData(Jan, 'MaxTemp(°C)');
-    const janWarmestLow = this.extremeData(Jan, 'MinTemp(°C)');
-    const janWarmestMean = this.extremeData(Jan, 'MeanTemp(°C)');
-
-    const febWarmestHigh = this.extremeData(Feb, 'MaxTemp(°C)');
-    const febWarmestLow = this.extremeData(Feb, 'MinTemp(°C)');
-    const febWarmestMean = this.extremeData(Feb, 'MeanTemp(°C)');
-
-    const marWarmestHigh = this.extremeData(Mar, 'MaxTemp(°C)');
-    return {
-      Jan: {
-        warmest: {
-          high: janWarmestHigh,
-          low: janWarmestLow,
-          mean: janWarmestMean,
-        },
-      },
-      Feb: {
-        warmest: {
-          high: febWarmestHigh,
-          low: febWarmestLow,
-          mean: febWarmestMean,
-        },
-      },
-      Mar: {
-        warmest: {
-          high: marWarmestHigh,
-        },
-      },
-    };
-  };
-
   // Returns the warmest number for each month of the year
   dataEachMonth = <K extends keyof CsvObject>(year: CsvObject[], key: K) => {
     const yearArray: number[] = this.setter(year, key);
     return yearArray;
   };
 
+  extremeHighs = (set: CsvObject[]): any => {
+    const highs = this.setter(set, 'MaxTemp(°C)');
+
+    // Return warmest high & corresponding date
+    const warmestNumber = Math.max(...highs);
+    const warmestIndex = highs.indexOf(warmestNumber);
+    const warmestDate = set[warmestIndex]['Date/Time'];
+
+    // Return coldest high & corresponding date
+    const coldest = Math.min(...highs);
+    const coldIndex = highs.indexOf(coldest);
+    const coldestDate = set[coldIndex]['Date/Time'];
+
+    return {
+      warmest: {
+        high: {
+          value: warmestNumber,
+          date: warmestDate,
+        },
+      },
+      coldest: {
+        high: {
+          value: coldest,
+          date: coldestDate,
+        },
+      },
+    };
+  };
+
   // Return the date of the warmest high
-  extremeData = <K extends keyof CsvObject>(
-    set: CsvObject[],
-    key: K
-  ): StatObject => {
+  extremeData = <K extends keyof CsvObject>(set: CsvObject[], key: K): any => {
     const newArray: number[] = this.setter(set, key);
-    let dateIndex;
+    let warmDateIndex;
     let warmestNumber;
     let warmestNumberDate;
+    let coldDateIndex;
+    let coldestNumber;
+    let coldestNumberDate;
+
+    const precipArray: number[] = this.setter(set, 'TotalPrecip(mm)');
+    const maxPrecip = Math.max(...precipArray);
+    const precipIndex = precipArray.indexOf(Math.max(...precipArray));
+    const precipDay = set[precipIndex]['Date/Time'];
+
     warmestNumber = Math.max(...newArray);
-    dateIndex = newArray.indexOf(Math.max(...newArray));
-    warmestNumberDate = set[dateIndex]['Date/Time'];
+    coldestNumber = Math.min(...newArray);
+
+    warmDateIndex = newArray.indexOf(Math.max(...newArray));
+    coldDateIndex = newArray.indexOf(Math.min(...newArray));
+
+    warmestNumberDate = set[warmDateIndex]['Date/Time'];
+    coldestNumberDate = set[coldDateIndex]['Date/Time'];
+
     return {
-      value: warmestNumber,
-      date: warmestNumberDate,
+      warmest: {
+        value: warmestNumber,
+        date: warmestNumberDate,
+      },
+      coldest: {
+        value: coldestNumber,
+        date: coldestNumberDate,
+      },
+      precip: {
+        value: maxPrecip,
+        date: precipDay,
+      },
     };
+  };
+
+  renderStats = (avg: SummaryObject, xtr?: MonthSummExtreme): any => {
+    console.log(
+      `January: \n Average high: ${avg.Jan.avgHigh} \n Average low: ${avg.Jan.avgLow} \n Mean: ${avg.Jan.mean} \n Precipitation totals: ${avg.Jan.precipTotal} \n Precipitation days: ${avg.Jan.precipDays}`
+    );
+    console.log(
+      `February: \n Average high: ${avg.Feb.avgHigh} \n Average low: ${avg.Feb.avgLow} \n Mean: ${avg.Feb.mean} \n Precipitation totals: ${avg.Feb.precipTotal} \n Precipitation days: ${avg.Feb.precipDays}`
+    );
   };
 }
