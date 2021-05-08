@@ -69,9 +69,11 @@ export interface DataField {
   mean: StatObject;
 }
 
-export interface MonthSummExtreme {
+export interface MonthExtremeSum {
+  name: string;
   warmest: DataField;
   coldest: DataField;
+  precip: StatObject;
 }
 
 export type SummaryObject = MonthSummary[];
