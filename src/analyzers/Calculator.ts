@@ -1,5 +1,5 @@
 import { Month, CsvObject, monthParser } from '../parser';
-import { MonthSummary, MonthSummExtreme, SummaryObject } from '../datatypes';
+import { MonthSummary } from '../datatypes';
 import dayjs from 'dayjs';
 
 export class Calculator {
@@ -48,6 +48,7 @@ export class Calculator {
     return count;
   };
 
+  // Return the written name of the month
   getMonthName = (set: CsvObject[]): any => {
     return dayjs(set[0].Month).format('MMMM');
   };
@@ -181,19 +182,4 @@ export class Calculator {
       },
     };
   };
-
-  // Renders the stats
-  /*renderStats = (avg: SummaryObject, xtr?: MonthSummExtreme): any => {
-    avg.forEach((a) => {
-      console.log(`${a.name}: \n`);
-      console.log('Average high: ', a.avgHigh);
-    });
-  };
-  console.log(
-      `January: \n Average high: ${avg.Jan.avgHigh} \n Average low: ${avg.Jan.avgLow} \n Mean: ${avg.Jan.mean} \n Precipitation totals: ${avg.Jan.precipTotal} \n Precipitation days: ${avg.Jan.precipDays}`
-    );
-    console.log(
-      `February: \n Average high: ${avg.Feb.avgHigh} \n Average low: ${avg.Feb.avgLow} \n Mean: ${avg.Feb.mean} \n Precipitation totals: ${avg.Feb.precipTotal} \n Precipitation days: ${avg.Feb.precipDays}`
-    );
-  };*/
 }
