@@ -32,23 +32,7 @@ export interface CsvObject {
   SpdofMaxGustFlag: string;
 }
 
-export type Month = CsvObject[];
-
-export interface Year {
-  Jan: Month;
-  Feb: Month;
-  Mar: Month;
-  Apr: Month;
-  May: Month;
-  Jun: Month;
-  Jul: Month;
-  Aug: Month;
-  Sep: Month;
-  Oct: Month;
-  Nov: Month;
-  Dec: Month;
-}
-
+// Used for the monthly summaries
 export interface MonthSummary {
   name: string;
   avgHigh: number;
@@ -69,6 +53,7 @@ export interface DataField {
   mean: StatObject;
 }
 
+// Used for monthly extremes
 export interface MonthExtremeSum {
   name: string;
   warmest: DataField;

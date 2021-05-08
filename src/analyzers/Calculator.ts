@@ -1,5 +1,5 @@
-import { Month, CsvObject, monthParser } from '../parser';
-import { MonthSummary } from '../datatypes';
+import { monthParser } from '../parser';
+import { MonthSummary, CsvObject } from '../datatypes';
 import dayjs from 'dayjs';
 
 export class Calculator {
@@ -21,7 +21,7 @@ export class Calculator {
   };
 
   // Returns coldest number for a particular metric (max temp, low temp, etc.) within a given month
-  coldest = <K extends keyof CsvObject>(month: Month, key: K): number => {
+  coldest = <K extends keyof CsvObject>(month: CsvObject[], key: K): number => {
     const set: number[] = this.setter(month, key);
     return Math.min(...set);
   };

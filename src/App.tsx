@@ -1,8 +1,7 @@
 import React from 'react';
-import { CsvObject } from './parser';
 import { parse, ParseResult } from 'papaparse';
 import { Calculator } from './analyzers/Calculator';
-import { StatsObject, YearStats } from './datatypes';
+import { StatsObject, YearStats, CsvObject } from './datatypes';
 import { Grid, Paper } from '@material-ui/core';
 import dayjs from 'dayjs';
 
