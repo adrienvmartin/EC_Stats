@@ -1,13 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { CsvObject } from './parser';
 import { parse, ParseResult } from 'papaparse';
 import { Calculator } from './analyzers/Calculator';
-import {
-  MonthSummary,
-  MonthExtremeSum,
-  StatsObject,
-  YearStats,
-} from './datatypes';
+import { StatsObject, YearStats } from './datatypes';
 import { Grid, Paper } from '@material-ui/core';
 import dayjs from 'dayjs';
 
