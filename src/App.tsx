@@ -1,54 +1,63 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
+import { CsvObject } from './parser';
 import { parse, ParseResult } from 'papaparse';
-import { monthParser, Months, CsvObject } from './parser';
 import { Calculator } from './analyzers/Calculator';
 
 interface AppState {
-  filename: string;
-  data?: CsvObject[];
-  months?: Months;
+  year?: CsvObject[];
+  loaded: boolean;
+  summary?: any;
 }
 
-interface AppProps {
-  stats?: [];
-}
-
-const calc = new Calculator();
-
-export class App extends React.Component<AppProps, AppState> {
-  constructor(props: AppProps) {
-    super(props);
-    this.state = { filename: '' };
-  }
-
-  private onSubmit(filename: string) {
-    console.log(`Submitted: ${filename}`);
-    // return new CsvReader(filename);
-  }
-
-  onHandleClick = (filename: string): void => {
-    this.setState({ filename: filename });
-    console.log(this.state.filename);
+export class App extends React.Component<{}, AppState> {
+  state: AppState = {
+    loaded: false,
+    summary: [],
+    year: [],
   };
 
-  warmestHigh = () => {
-    let maxhigh;
-    let maxindex;
-    let indexMonth;
-    if (this.state.months) {
-      const data = calc.dataEachMonth(
-        Object.values(this.state.months),
-        'MaxTemp(°C)'
-      );
-      maxhigh = Math.max(...data);
-      maxindex = data.indexOf(Math.max(...data));
-      if (maxindex === 7) {
-        indexMonth = 'August';
-      }
-    }
+  createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
+    Array.from(e.dataTransfer.files)
+      .filter((file) => file.type === 'text/csv')
+      .forEach(async (file) => {
+        const text = await file.text();
+        const result: ParseResult<CsvObject> = await parse(text, {
+          header: true,
+          skipEmptyLines: false,
+          transformHeader: (h) => {
+            let regex = /\s/g;
+            return h.replace(regex, '');
+          },
+          complete: (results) => {
+            console.log('Parsing complete: \n', results);
+          },
+        });
+        this.setState({ year: result.data, loaded: true });
+        console.log('this.state.year: ', this.state.year);
+      });
+  };
 
-    return `The warmest high of the year is: ${maxhigh}, in the month of ${indexMonth}`;
+  generateStats = (e: React.MouseEvent): void => {
+    e.preventDefault();
+    const calc = new Calculator();
+    if (this.state.year !== undefined) {
+      const summary = calc.monthlySummary(this.state.year);
+      this.setState({ summary }, () => {
+        console.log('this.state: ', this.state);
+        calc.renderStats(summary);
+      });
+      // console.log('warmestEachMonth: ', calc.warmestEachMonth(this.state.year));
+    }
+  };
+
+  clearCsv = (): void => {
+    this.setState({
+      loaded: false,
+      year: undefined,
+      summary: undefined,
+    });
+    console.clear();
   };
 
   render() {
@@ -78,60 +87,38 @@ export class App extends React.Component<AppProps, AppState> {
                     }}
                     onDrop={(e) => {
                       e.preventDefault();
-
-                      Array.from(e.dataTransfer.files)
-                        .filter((file) => file.type === 'text/csv')
-                        .forEach(async (file) => {
-                          const text = await file.text();
-                          const result: ParseResult<CsvObject> = parse(text, {
-                            header: true,
-                            skipEmptyLines: true,
-                            transformHeader: (h) => {
-                              return h.replace(/\s/g, '');
-                            },
-                          });
-                          const months: Months = monthParser(result.data);
-                          this.setState({
-                            data: result.data,
-                            months,
-                          });
-
-                          if (this.state.data !== undefined) {
-                            const newobj = calc.specificDate(
-                              this.state.data,
-                              'MaxTemp(°C)'
-                            );
-                            console.log(
-                              `The ${newobj.parameter} was ${newobj.value} on ${newobj.date}`
-                            );
-                          }
-
-                          if (this.state.months !== undefined) {
-                            const monthlyMaxes = calc.dataEachMonth(
-                              Object.values(this.state.months),
-                              'MaxTemp(°C)'
-                            );
-                            console.log(
-                              'Array from everyMonth (max temp for each month): \n'
-                            );
-                            console.log(monthlyMaxes);
-
-                            console.log('Max temp of all months: \n');
-                            console.log(Math.max(...monthlyMaxes));
-                          }
-                        });
+                      this.createStatsArray(e);
                     }}
                   >
-                    DROP HERE
+                    Drop CSV File Here
                   </div>
                 </form>
               </Card.Body>
             </Card>
+            <br />
+            <Card>
+              <div>
+                {this.state.loaded
+                  ? 'Click below to generate'
+                  : 'Please load CSV file'}
+              </div>
+            </Card>
+            <br />
+            <Card>
+              <Card.Body>
+                <button onClick={(e) => this.generateStats(e)}>
+                  Generate Stats
+                </button>
+                {'   '}
+                <button onClick={this.clearCsv}>Clear CSV</button>
+              </Card.Body>
+            </Card>
+            <br />
+            <br />
           </Col>
           <Col></Col>
         </Row>
         <br />
-        {this.state.months ? this.warmestHigh() : null}
       </Container>
     );
   }

@@ -33,20 +33,18 @@ export type CsvObject = {
 };
 
 export const monthParser = (data: CsvObject[]) => {
-  // Add check for leap years
-
-  const Jan = data.slice(0, 31);
-  const Feb = data.slice(31, 60);
-  const Mar = data.slice(60, 91);
-  const Apr = data.slice(91, 121);
-  const May = data.slice(121, 152);
-  const Jun = data.slice(152, 182);
-  const Jul = data.slice(182, 213);
-  const Aug = data.slice(213, 244);
-  const Sep = data.slice(244, 274);
-  const Oct = data.slice(274, 305);
-  const Nov = data.slice(305, 335);
-  const Dec = data.slice(335, 366);
+  const Jan = data.filter((d) => d.Month === '01');
+  const Feb = data.filter((d) => d.Month === '02');
+  const Mar = data.filter((d) => d.Month === '03');
+  const Apr = data.filter((d) => d.Month === '04');
+  const May = data.filter((d) => d.Month === '05');
+  const Jun = data.filter((d) => d.Month === '06');
+  const Jul = data.filter((d) => d.Month === '07');
+  const Aug = data.filter((d) => d.Month === '08');
+  const Sep = data.filter((d) => d.Month === '09');
+  const Oct = data.filter((d) => d.Month === '10');
+  const Nov = data.filter((d) => d.Month === '11');
+  const Dec = data.filter((d) => d.Month === '12');
 
   return {
     Jan,
@@ -62,6 +60,10 @@ export const monthParser = (data: CsvObject[]) => {
     Nov,
     Dec,
   };
+};
+
+export const newParser = (data: CsvObject[]) => {
+  return data.filter((d) => d.Month === '02');
 };
 
 export interface Months {
