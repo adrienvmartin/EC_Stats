@@ -67,8 +67,26 @@ export class App extends React.Component<{}, AppState> {
   };
 
   renderStats = (): any => {
-    this.state.summary.forEach((s: MonthSummary) => {
-      console.log(`${s.name}: \n Average high: ${s.avgHigh}`);
+    console.log('stats rendered');
+    return this.state.summary.map((s: MonthSummary) => {
+      return (
+        <div>
+          <Row>
+            <Col md={22}>
+              <Card>
+                <Card.Body>
+                  <h1>{s.name}</h1>
+                  Average high: {s.avgHigh}
+                  <br />
+                  Average low: {s.avgLow}
+                  <br />
+                  Mean temp: {s.mean}
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      );
     });
   };
 
@@ -125,6 +143,7 @@ export class App extends React.Component<{}, AppState> {
                 <button onClick={this.clearCsv}>Clear CSV</button>
               </Card.Body>
             </Card>
+            {this.state.summary ? this.renderStats() : null}
             <br />
             <br />
           </Col>
