@@ -34,6 +34,7 @@ export class App extends React.Component<{}, AppState> {
 
   componentDidMount() {
     console.clear();
+    console.log(this.state);
   }
 
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
@@ -112,9 +113,10 @@ export class App extends React.Component<{}, AppState> {
         <br />
         Average high: {summary.avgHigh}°C
         <br />
+        Mean temp: {summary.mean}°C
+        <br />
         Average low: {summary.avgLow}°C
         <br />
-        Mean temp: {summary.mean}°C
         <br />
         Precipitation (mm): {summary.precipTotal}mm <br />
         Precipitation days: {summary.precipDays}
@@ -194,7 +196,27 @@ export class App extends React.Component<{}, AppState> {
           alignItems="center"
           spacing={3}
         >
-          {this.state.stats ? this.renderStats(this.state.stats) : null}
+          {this.state.stats.length > 0 ? (
+            <div>
+              <h1>
+                Stats for{' '}
+                {dayjs(this.state.stats[0].extremes.precip.date).format('YYYY')}
+              </h1>
+            </div>
+          ) : null}
+        </Grid>
+        <br />
+        <br />
+        <Grid
+          container
+          direction="row"
+          justify="space-evenly"
+          alignItems="center"
+          spacing={3}
+        >
+          {this.state.stats.length > 0
+            ? this.renderStats(this.state.stats)
+            : null}
         </Grid>
       </React.Fragment>
     );
