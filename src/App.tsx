@@ -73,8 +73,8 @@ export class App extends React.Component<{}, AppState> {
   clearCsv = (): void => {
     this.setState({
       loaded: false,
-      year: undefined,
-      stats: undefined,
+      year: [],
+      stats: [],
     });
     console.clear();
   };
@@ -183,7 +183,7 @@ export class App extends React.Component<{}, AppState> {
               Generate Stats
             </button>
             {'   '}
-            <button onClick={this.clearCsv}>Clear CSV</button>
+            <button onClick={() => this.clearCsv()}>Clear CSV</button>
           </Paper>
           <br />
           <br />
