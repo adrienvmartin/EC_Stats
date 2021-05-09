@@ -9,6 +9,7 @@ const style = {
   fileDropper: {
     padding: 12,
     alignItems: 'center',
+    justifyContent: 'center',
     borderStyle: 'solid',
   },
   highlighted: {
@@ -159,27 +160,29 @@ export class App extends React.Component<{}, AppState> {
           <br />
           {/* CSV SELECTION */}
           {/*******************/}
+          <form>
+            <div
+              style={style.fileDropper}
+              onDragOver={(e) => {
+                e.preventDefault();
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                this.createStatsArray(e);
+              }}
+            >
+              {this.state.loaded
+                ? 'Click below to generate'
+                : 'Drag & Drop CSV File Here'}
+            </div>
+          </form>
           <Paper>
-            <form>
-              <div
-                style={style.fileDropper}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  this.createStatsArray(e);
-                }}
-              >
-                {this.state.loaded
-                  ? 'Click below to generate'
-                  : 'Drag & Drop CSV File Here'}
-              </div>
-            </form>
-          </Paper>
-          <br />
-          <Paper>
-            <button onClick={(e) => this.generateStats(e)}>
+            <button
+              onClick={(e) => this.generateStats(e)}
+              disabled={
+                this.state.year !== undefined && this.state.year.length < 1
+              }
+            >
               Generate Stats
             </button>
             {'   '}
