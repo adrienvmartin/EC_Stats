@@ -35,7 +35,6 @@ export class App extends React.Component<{}, AppState> {
 
   componentDidMount() {
     console.clear();
-    console.log(this.state);
   }
 
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
