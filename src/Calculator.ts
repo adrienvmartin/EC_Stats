@@ -1,5 +1,5 @@
-import { monthParser } from '../parser';
-import { MonthSummary, CsvObject, MonthExtremeSum } from '../datatypes';
+import { monthParser } from './parser';
+import { MonthSummary, CsvObject, MonthExtremeSum } from './datatypes';
 import dayjs from 'dayjs';
 
 export class Calculator {
@@ -52,7 +52,7 @@ export class Calculator {
 
   // Return the written name of the month
   getMonthName = (set: CsvObject[]): any => {
-    return dayjs(set[0].Month).format('MMMM');
+    return dayjs(set[0]['Date/Time']).format('MMMM');
   };
 
   // Returns a summary of temperature averages & precipitation totals/days for a given month
