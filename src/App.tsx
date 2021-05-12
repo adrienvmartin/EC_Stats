@@ -1,6 +1,6 @@
 import React from 'react';
 import { parse, ParseResult } from 'papaparse';
-import { Calculator } from './analyzers/Calculator';
+import { Calculator } from './Calculator';
 import { StatsObject, YearStats, CsvObject } from './datatypes';
 import { Grid, Paper } from '@material-ui/core';
 import dayjs from 'dayjs';
@@ -187,7 +187,6 @@ export class App extends React.Component<{}, AppState> {
             {'   '}
             <button onClick={() => this.clearCsv()}>Clear CSV</button>
           </Paper>
-          <br />
           <br />
           <br />
         </Grid>
