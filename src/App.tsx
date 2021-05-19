@@ -118,7 +118,6 @@ export class App extends React.Component<{}, AppState> {
 
   renderStats = (summary: YearStats): any => {
     return summary.map((s: StatsObject) => {
-      console.log(s);
       return (
         <Paper
           style={{
