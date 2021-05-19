@@ -33,10 +33,6 @@ export class App extends React.Component<{}, AppState> {
     stats: [],
   };
 
-  componentDidMount() {
-    console.clear();
-  }
-
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
     Array.from(e.dataTransfer.files)
       .filter((file) => file.type === 'text/csv')
@@ -49,12 +45,8 @@ export class App extends React.Component<{}, AppState> {
             let regex = /\s/g;
             return h.replace(regex, '');
           },
-          complete: (results) => {
-            console.log('Parsing complete: \n', results);
-          },
         });
         this.setState({ year: result.data, loaded: true });
-        console.log('this.state.year: ', this.state.year);
       });
   };
 
@@ -63,10 +55,7 @@ export class App extends React.Component<{}, AppState> {
     const calc = new Calculator();
     if (this.state.year !== undefined) {
       const stats = calc.getYearStats(this.state.year);
-      this.setState({ stats }, () => {
-        console.log('Stats generated!');
-        console.log(this.state.stats);
-      });
+      this.setState({ stats });
     }
   };
 
@@ -76,7 +65,6 @@ export class App extends React.Component<{}, AppState> {
       year: [],
       stats: [],
     });
-    console.clear();
   };
 
   renderExtremes = (summary: StatsObject): any => {
@@ -104,22 +92,24 @@ export class App extends React.Component<{}, AppState> {
   };
 
   renderSummary = (stats: StatsObject): any => {
-    const { summary } = stats;
+    const {
+      summary: { name, avgHigh, mean, avgLow, precipTotal, precipDays },
+    } = stats;
     return (
       <div key={Math.random()}>
         <div>
-          <h1>{summary.name}</h1>
+          <h1>{name}</h1>
         </div>
         <br />
-        Average high: {summary.avgHigh}°C
+        Average high: {avgHigh}°C
         <br />
-        Mean temp: {summary.mean}°C
+        Mean temp: {mean}°C
         <br />
-        Average low: {summary.avgLow}°C
+        Average low: {avgLow}°C
         <br />
         <br />
-        Precipitation (mm): {summary.precipTotal}mm <br />
-        Precipitation days: {summary.precipDays}
+        Precipitation (mm): {precipTotal}mm <br />
+        Precipitation days: {precipDays}
         <br />
         <br />
       </div>
