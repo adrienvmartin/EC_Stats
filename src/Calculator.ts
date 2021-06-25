@@ -1,5 +1,5 @@
-import { monthParser } from './parser';
-import { MonthSummary, CsvObject, MonthExtremeSum } from './datatypes';
+import {monthParser} from './parser';
+import {CsvObject, MonthExtremeSum, MonthSummary} from './datatypes';
 import dayjs from 'dayjs';
 
 export class Calculator {
@@ -38,16 +38,15 @@ export class Calculator {
     return set.reduce((a, b) => a + b, 0);
   };
 
-  // Returns the number of days with measureable precipitation
+  // Returns the number of days with measurable precipitation
   getPrecipDays = <K extends keyof CsvObject>(
     month: CsvObject[],
     key: K
   ): any => {
     const set: number[] = this.setter(month, key);
-    const count: number = set.filter((s) => {
+    return set.filter((s) => {
       return s > 0;
     }).length;
-    return count;
   };
 
   // Return the written name of the month
@@ -109,7 +108,7 @@ export class Calculator {
   // Returns a year's worth of monthly summaries
   monthlySummary = (set: CsvObject[]): MonthSummary[] => {
     const year = monthParser(set);
-    const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
+    const {Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec} = year;
 
     const JanSummary: MonthSummary = this.getMonthSummary(Jan);
     const FebSummary: MonthSummary = this.getMonthSummary(Feb);
@@ -142,7 +141,7 @@ export class Calculator {
 
   monthlyExtremes = (set: CsvObject[]): MonthExtremeSum[] => {
     const year = monthParser(set);
-    const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
+    const {Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec} = year;
 
     const JanExtremes = this.getMonthExtremes(Jan);
     const FebExtremes = this.getMonthExtremes(Feb);
@@ -179,7 +178,7 @@ export class Calculator {
     const extremes = this.monthlyExtremes(set);
     const statsArr = [];
     for (let i = 0; i < summary.length; i++) {
-      statsArr.push({ summary: summary[i], extremes: extremes[i] });
+      statsArr.push({summary: summary[i], extremes: extremes[i]});
     }
     return statsArr;
   };
