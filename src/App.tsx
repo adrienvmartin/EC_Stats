@@ -191,6 +191,7 @@ export class App extends React.Component<{}, AppState> {
               <h1>
                 Stats for{' '}
                 {dayjs(this.state.stats[0].extremes.precip.date).format('YYYY')}
+                {'  '}in {this.state.stats[0].stationName}
               </h1>
             </div>
           ) : null}
