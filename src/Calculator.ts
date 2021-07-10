@@ -1,5 +1,5 @@
-import {monthParser} from './parser';
-import {CsvObject, MonthExtremeSum, MonthSummary} from './datatypes';
+import { monthParser } from './parser';
+import { CsvObject, MonthExtremeSum, MonthSummary } from './datatypes';
 import dayjs from 'dayjs';
 
 export class Calculator {
@@ -12,6 +12,10 @@ export class Calculator {
     });
 
     return arr;
+  };
+
+  getStation = (set: CsvObject[]): any => {
+    return set[0]['StationName'];
   };
 
   // Returns warmest number for a particular metric (max temp, low temp, etc.) within a given month
@@ -108,7 +112,7 @@ export class Calculator {
   // Returns a year's worth of monthly summaries
   monthlySummary = (set: CsvObject[]): MonthSummary[] => {
     const year = monthParser(set);
-    const {Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec} = year;
+    const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
 
     const JanSummary: MonthSummary = this.getMonthSummary(Jan);
     const FebSummary: MonthSummary = this.getMonthSummary(Feb);
@@ -141,7 +145,7 @@ export class Calculator {
 
   monthlyExtremes = (set: CsvObject[]): MonthExtremeSum[] => {
     const year = monthParser(set);
-    const {Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec} = year;
+    const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
 
     const JanExtremes = this.getMonthExtremes(Jan);
     const FebExtremes = this.getMonthExtremes(Feb);
@@ -176,9 +180,14 @@ export class Calculator {
   getYearStats = (set: CsvObject[]): any => {
     const summary = this.monthlySummary(set);
     const extremes = this.monthlyExtremes(set);
+    const stationName = this.getStation(set);
     const statsArr = [];
     for (let i = 0; i < summary.length; i++) {
-      statsArr.push({summary: summary[i], extremes: extremes[i]});
+      statsArr.push({
+        summary: summary[i],
+        extremes: extremes[i],
+        stationName: stationName,
+      });
     }
     return statsArr;
   };
