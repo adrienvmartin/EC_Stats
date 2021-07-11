@@ -174,39 +174,6 @@ export class Calculator {
     };
   };
 
-  monthlyExtremes = (set: CsvObject[]): MonthExtremeSum[] => {
-    const year = monthParser(set);
-    const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
-
-    const JanExtremes = this.getMonthExtremes(Jan);
-    const FebExtremes = this.getMonthExtremes(Feb);
-    const MarExtremes = this.getMonthExtremes(Mar);
-    const AprExtremes = this.getMonthExtremes(Apr);
-    const MayExtremes = this.getMonthExtremes(May);
-    const JunExtremes = this.getMonthExtremes(Jun);
-    const JulExtremes = this.getMonthExtremes(Jul);
-    const AugExtremes = this.getMonthExtremes(Aug);
-    const SepExtremes = this.getMonthExtremes(Sep);
-    const OctExtremes = this.getMonthExtremes(Oct);
-    const NovExtremes = this.getMonthExtremes(Nov);
-    const DecExtremes = this.getMonthExtremes(Dec);
-
-    return [
-      JanExtremes,
-      FebExtremes,
-      MarExtremes,
-      AprExtremes,
-      MayExtremes,
-      JunExtremes,
-      JulExtremes,
-      AugExtremes,
-      SepExtremes,
-      OctExtremes,
-      NovExtremes,
-      DecExtremes,
-    ];
-  };
-
   // Return an array of objects containing each month's average and extreme values
   getYearStats = (set: CsvObject[]): any => {
     const summary = this.yearSummary(set).summary;
