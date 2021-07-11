@@ -1,5 +1,10 @@
 import { monthParser } from './parser';
-import { MonthSummary, CsvObject, MonthExtremeSum } from './datatypes';
+import {
+  MonthSummary,
+  CsvObject,
+  MonthExtremeSum,
+  YearSummaryByMonth,
+} from './datatypes';
 import dayjs from 'dayjs';
 
 export class Calculator {
@@ -107,7 +112,7 @@ export class Calculator {
   };
 
   // Returns a year's worth of monthly summaries
-  monthlySummary = (set: CsvObject[]): MonthSummary[] => {
+  yearSummary = (set: CsvObject[]): YearSummaryByMonth => {
     const year = monthParser(set);
     const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
 
@@ -124,20 +129,49 @@ export class Calculator {
     const NovSummary: MonthSummary = this.getMonthSummary(Nov);
     const DecSummary: MonthSummary = this.getMonthSummary(Dec);
 
-    return [
-      JanSummary,
-      FebSummary,
-      MarSummary,
-      AprSummary,
-      MaySummary,
-      JunSummary,
-      JulSummary,
-      AugSummary,
-      SepSummary,
-      OctSummary,
-      NovSummary,
-      DecSummary,
-    ];
+    const JanExtremes = this.getMonthExtremes(Jan);
+    const FebExtremes = this.getMonthExtremes(Feb);
+    const MarExtremes = this.getMonthExtremes(Mar);
+    const AprExtremes = this.getMonthExtremes(Apr);
+    const MayExtremes = this.getMonthExtremes(May);
+    const JunExtremes = this.getMonthExtremes(Jun);
+    const JulExtremes = this.getMonthExtremes(Jul);
+    const AugExtremes = this.getMonthExtremes(Aug);
+    const SepExtremes = this.getMonthExtremes(Sep);
+    const OctExtremes = this.getMonthExtremes(Oct);
+    const NovExtremes = this.getMonthExtremes(Nov);
+    const DecExtremes = this.getMonthExtremes(Dec);
+
+    return {
+      summary: [
+        JanSummary,
+        FebSummary,
+        MarSummary,
+        AprSummary,
+        MaySummary,
+        JunSummary,
+        JulSummary,
+        AugSummary,
+        SepSummary,
+        OctSummary,
+        NovSummary,
+        DecSummary,
+      ],
+      extremes: [
+        JanExtremes,
+        FebExtremes,
+        MarExtremes,
+        AprExtremes,
+        MayExtremes,
+        JunExtremes,
+        JulExtremes,
+        AugExtremes,
+        SepExtremes,
+        OctExtremes,
+        NovExtremes,
+        DecExtremes,
+      ],
+    };
   };
 
   monthlyExtremes = (set: CsvObject[]): MonthExtremeSum[] => {
@@ -175,8 +209,8 @@ export class Calculator {
 
   // Return an array of objects containing each month's average and extreme values
   getYearStats = (set: CsvObject[]): any => {
-    const summary = this.monthlySummary(set);
-    const extremes = this.monthlyExtremes(set);
+    const summary = this.yearSummary(set).summary;
+    const extremes = this.yearSummary(set).extremes;
     const statsArr = [];
     for (let i = 0; i < summary.length; i++) {
       statsArr.push({ summary: summary[i], extremes: extremes[i] });
