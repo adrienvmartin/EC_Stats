@@ -70,4 +70,9 @@ export type StatsObject = {
   extremes: MonthExtremeSum;
 };
 
+export type YearSummaryByMonth = {
+  summary: MonthSummary[];
+  extremes: MonthExtremeSum[];
+};
+
 export type YearStats = StatsObject[];
