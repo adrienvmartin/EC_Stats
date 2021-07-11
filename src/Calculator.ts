@@ -1,5 +1,5 @@
 import { monthParser } from './parser';
-import { MonthSummary, CsvObject, MonthExtremeSum } from './datatypes';
+import { CsvObject, MonthExtremeSum, MonthSummary } from './datatypes';
 import dayjs from 'dayjs';
 
 export class Calculator {
@@ -12,6 +12,10 @@ export class Calculator {
     });
 
     return arr;
+  };
+
+  getStation = (set: CsvObject[]): any => {
+    return set[0]['StationName'];
   };
 
   // Returns warmest number for a particular metric (max temp, low temp, etc.) within a given month
@@ -38,16 +42,15 @@ export class Calculator {
     return set.reduce((a, b) => a + b, 0);
   };
 
-  // Returns the number of days with measureable precipitation
+  // Returns the number of days with measurable precipitation
   getPrecipDays = <K extends keyof CsvObject>(
     month: CsvObject[],
     key: K
   ): any => {
     const set: number[] = this.setter(month, key);
-    const count: number = set.filter((s) => {
+    return set.filter((s) => {
       return s > 0;
     }).length;
-    return count;
   };
 
   // Return the written name of the month
@@ -177,10 +180,16 @@ export class Calculator {
   getYearStats = (set: CsvObject[]): any => {
     const summary = this.monthlySummary(set);
     const extremes = this.monthlyExtremes(set);
+    const stationName = this.getStation(set);
     const statsArr = [];
     for (let i = 0; i < summary.length; i++) {
-      statsArr.push({ summary: summary[i], extremes: extremes[i] });
+      statsArr.push({
+        summary: summary[i],
+        extremes: extremes[i],
+        stationName: stationName,
+      });
     }
+    console.log(statsArr);
     return statsArr;
   };
 
