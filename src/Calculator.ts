@@ -179,8 +179,8 @@ export class Calculator {
 
   // Return an array of objects containing each month's average and extreme values
   getYearStats = (set: CsvObject[]): any => {
-    const summary = this.monthlySummary(set);
-    const extremes = this.monthlyExtremes(set);
+    const summary = this.yearSummary(set).summary;
+    const extremes = this.yearSummary(set).extremes;
     const stationName = this.getStation(set);
     const statsArr = [];
     for (let i = 0; i < summary.length; i++) {
