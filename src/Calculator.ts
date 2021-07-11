@@ -19,6 +19,10 @@ export class Calculator {
     return arr;
   };
 
+  getStation = (set: CsvObject[]): any => {
+    return set[0]['StationName'];
+  };
+
   // Returns warmest number for a particular metric (max temp, low temp, etc.) within a given month
   warmest = <K extends keyof CsvObject>(month: CsvObject[], key: K): number => {
     const set: number[] = this.setter(month, key);
@@ -43,16 +47,15 @@ export class Calculator {
     return set.reduce((a, b) => a + b, 0);
   };
 
-  // Returns the number of days with measureable precipitation
+  // Returns the number of days with measurable precipitation
   getPrecipDays = <K extends keyof CsvObject>(
     month: CsvObject[],
     key: K
   ): any => {
     const set: number[] = this.setter(month, key);
-    const count: number = set.filter((s) => {
+    return set.filter((s) => {
       return s > 0;
     }).length;
-    return count;
   };
 
   // Return the written name of the month
@@ -176,12 +179,18 @@ export class Calculator {
 
   // Return an array of objects containing each month's average and extreme values
   getYearStats = (set: CsvObject[]): any => {
-    const summary = this.yearSummary(set).summary;
-    const extremes = this.yearSummary(set).extremes;
+    const summary = this.monthlySummary(set);
+    const extremes = this.monthlyExtremes(set);
+    const stationName = this.getStation(set);
     const statsArr = [];
     for (let i = 0; i < summary.length; i++) {
-      statsArr.push({ summary: summary[i], extremes: extremes[i] });
+      statsArr.push({
+        summary: summary[i],
+        extremes: extremes[i],
+        stationName: stationName,
+      });
     }
+    console.log(statsArr);
     return statsArr;
   };
 
