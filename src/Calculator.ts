@@ -190,7 +190,6 @@ export class Calculator {
         stationName: stationName,
       });
     }
-    console.log(statsArr);
     return statsArr;
   };
 
