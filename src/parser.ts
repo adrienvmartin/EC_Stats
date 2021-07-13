@@ -14,12 +14,6 @@ export const monthParser = (data: CsvObject[]) => {
   const Nov = data.filter((d) => d.Month === '11');
   const Dec = data.filter((d) => d.Month === '12');
 
-  /* if (data.filter((d) => d.Month === '01') !== undefined) {
-    const Jan = data.filter((d) => d.Month === '01');
-  } else {
-    const Jan = null;
-  }*/
-
   return {
     Jan,
     Feb,
