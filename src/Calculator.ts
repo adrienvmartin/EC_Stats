@@ -1,4 +1,4 @@
-import { monthParser } from './parser';
+import { monthParser, monthChecker } from './parser';
 import {
   MonthSummary,
   CsvObject,
@@ -119,6 +119,8 @@ export class Calculator {
     const year = monthParser(set);
     const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
 
+    monthChecker(set);
+
     const JanSummary: MonthSummary = this.getMonthSummary(Jan);
     const FebSummary: MonthSummary = this.getMonthSummary(Feb);
     const MarSummary: MonthSummary = this.getMonthSummary(Mar);
@@ -235,8 +237,8 @@ export class Calculator {
 
     const precipArray: number[] = this.setter(set, 'TotalPrecip(mm)');
     const maxPrecip = Math.max(...precipArray);
-    const precipIndex = precipArray.indexOf(Math.max(...precipArray));
-    const precipDay = set[precipIndex]['Date/Time'];
+    // const precipIndex = precipArray.indexOf(Math.max(...precipArray));
+    // const precipDay = set[precipIndex]['Date/Time'];
 
     warmestNumber = Math.max(...newArray);
     coldestNumber = Math.min(...newArray);
@@ -258,7 +260,7 @@ export class Calculator {
       },
       precip: {
         value: maxPrecip,
-        date: precipDay,
+        // date: precipDay,
       },
     };
   };
