@@ -1,4 +1,4 @@
-import { monthParser, monthChecker } from './parser';
+import { monthParser } from './parser';
 import {
   MonthSummary,
   CsvObject,
@@ -27,6 +27,10 @@ export class Calculator {
   warmest = <K extends keyof CsvObject>(month: CsvObject[], key: K): number => {
     const set: number[] = this.setter(month, key);
     return Math.max(...set);
+  };
+
+  warmestTest = (month: any) => {
+    return this.warmest(month, 'MaxTemp(°C)');
   };
 
   // Returns coldest number for a particular metric (max temp, low temp, etc.) within a given month
@@ -119,7 +123,9 @@ export class Calculator {
     const year = monthParser(set);
     const { Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec } = year;
 
-    monthChecker(set);
+    // monthChecker(set);
+    // console.log(this.warmestTest(Jan));
+    // console.log(this.warmestTest(Oct));
 
     const JanSummary: MonthSummary = this.getMonthSummary(Jan);
     const FebSummary: MonthSummary = this.getMonthSummary(Feb);
