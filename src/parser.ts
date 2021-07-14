@@ -30,6 +30,7 @@ export const monthParser = (data: CsvObject[]) => {
   };
 };
 
+// Maybe the undefined is not coming from the initial parsed array, but from one of the objects deeper in the code?
 export const monthChecker = (data: CsvObject[]) => {
   const Jan = data.filter((d) => d.Month === '01');
   const Feb = data.filter((d) => d.Month === '02');
@@ -44,7 +45,14 @@ export const monthChecker = (data: CsvObject[]) => {
   const Nov = data.filter((d) => d.Month === '11');
   const Dec = data.filter((d) => d.Month === '12');
 
+  console.log('Jan is valid: ' + singleMonth(Jan));
+  console.log('Jun is valid: ' + singleMonth(Jun));
+
   const monthArr = [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec];
 
   console.log(monthArr);
+};
+
+const singleMonth = (month: CsvObject[]) => {
+  return month[0]['MaxTemp(°C)'];
 };
