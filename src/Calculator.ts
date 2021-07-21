@@ -29,6 +29,10 @@ export class Calculator {
     return Math.max(...set);
   };
 
+  warmestTest = (month: any) => {
+    return this.warmest(month, 'MaxTemp(°C)');
+  };
+
   // Returns coldest number for a particular metric (max temp, low temp, etc.) within a given month
   coldest = <K extends keyof CsvObject>(month: CsvObject[], key: K): number => {
     const set: number[] = this.setter(month, key);
@@ -190,7 +194,6 @@ export class Calculator {
         stationName: stationName,
       });
     }
-    console.log(statsArr);
     return statsArr;
   };
 
