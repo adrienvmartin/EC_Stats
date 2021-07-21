@@ -45,14 +45,18 @@ export const monthChecker = (data: CsvObject[]) => {
   const Nov = data.filter((d) => d.Month === '11');
   const Dec = data.filter((d) => d.Month === '12');
 
-  console.log('Jan is valid: ' + singleMonth(Jan));
-  console.log('Jun is valid: ' + singleMonth(Jun));
-
-  const monthArr = [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec];
-
-  console.log(monthArr);
-};
-
-const singleMonth = (month: CsvObject[]) => {
-  return month[0]['MaxTemp(°C)'];
+  return {
+    Jan,
+    Feb,
+    Mar,
+    Apr,
+    May,
+    Jun,
+    Jul,
+    Aug,
+    Sep,
+    Oct,
+    Nov,
+    Dec,
+  };
 };
