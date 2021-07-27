@@ -1,5 +1,7 @@
 import React from 'react';
 import { parse, ParseResult } from 'papaparse';
+// import parse from 'csv-parse';
+import fs from 'fs';
 import { Calculator } from './Calculator';
 import { StatsObject, YearStats, CsvObject } from './datatypes';
 import { Grid, Paper } from '@material-ui/core';
@@ -25,6 +27,7 @@ interface AppState {
   year?: CsvObject[];
   loaded: boolean;
   stats: any;
+  selectedFile?: any;
 }
 
 export class App extends React.Component<{}, AppState> {
@@ -32,6 +35,7 @@ export class App extends React.Component<{}, AppState> {
     loaded: false,
     year: [],
     stats: [],
+    selectedFile: null,
   };
 
   // Create POST route that will send the result of this function to an API call
@@ -52,6 +56,7 @@ export class App extends React.Component<{}, AppState> {
         });
         // const newres = result.data.forEach(d => )
         // axios.post('/takestats', result);
+
         this.setState({ year: result.data, loaded: true });
       });
   };
@@ -143,6 +148,21 @@ export class App extends React.Component<{}, AppState> {
     });
   };
 
+  fileHandler = (e: any) => {
+    console.log(e.target.files[0]);
+    this.setState({ selectedFile: e.target.files[0] }, () => {
+      // console.log(this.state);
+    });
+  };
+
+  fileClick = () => {
+    const data = new FormData();
+    data.append('file', this.state.selectedFile);
+    axios.post('http://localhost:3001/upload', data, {}).then((res) => {
+      console.log(res.statusText);
+    });
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -170,6 +190,20 @@ export class App extends React.Component<{}, AppState> {
                 ? 'Click below to generate'
                 : 'Drag & Drop CSV File Here'}
             </div>
+          </form>
+          <form>
+            <input
+              type="file"
+              name="file"
+              onChange={(e) => this.fileHandler(e)}
+            />
+            <button
+              type="button"
+              className="btn btn-success btn-block"
+              onClick={this.fileClick}
+            >
+              Upload
+            </button>
           </form>
           <Paper>
             <button
