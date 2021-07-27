@@ -7,10 +7,6 @@ const app = express();
 
 app.use(express.json({ extended: false }));
 
-app.get('/test', (req, res) => {
-  res.send({ express: 'YOUR BACKEND IS CONNECTED' });
-});
-
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
