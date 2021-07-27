@@ -45,11 +45,21 @@ app.post('/upload', (req, res) => {
   });
 });
 
-app.post('/takestats', async (req, res) => {
+app.post('/takestats', (req, res) => {
   const data = [];
-
-  const fname = req.fname;
-  fs.createReadStream(__dirname, +fname);
+  let thename;
+  // Use fs.readdir to get the filename
+  fs.readdir(filepath, (err, files) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log('files[0] = ' + files[0]);
+    thename = files[0];
+    console.log('thename now equals ' + thename);
+  });
+  res.send({ message: thename });
+  console.log('thename = ' + thename);
+  // fs.createReadStream(__dirname, +thename);
 });
 
 app.listen(PORT, () => {
