@@ -36,6 +36,7 @@ export class App extends React.Component<{}, AppState> {
 
   // Create POST route that will send the result of this function to an API call
   // on the Express server that will then be put into a MySQL database
+  // Separate columns in here
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
     Array.from(e.dataTransfer.files)
       .filter((file) => file.type === 'text/csv')
@@ -43,13 +44,14 @@ export class App extends React.Component<{}, AppState> {
         const text = await file.text();
         const result: ParseResult<CsvObject> = await parse(text, {
           header: true,
-          skipEmptyLines: false,
+          skipEmptyLines: true,
           transformHeader: (h) => {
             let regex = /\s/g;
             return h.replace(regex, '');
           },
         });
-        axios.post('/takestats', result);
+        // const newres = result.data.forEach(d => )
+        // axios.post('/takestats', result);
         this.setState({ year: result.data, loaded: true });
       });
   };
