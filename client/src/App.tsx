@@ -50,6 +50,17 @@ export class App extends React.Component<{}, AppState> {
       });
   };
 
+  testAPI = async () => {
+    const response = await fetch('/test');
+    const body = await response.json();
+
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    console.log(body);
+    return body;
+  };
+
   generateStats = (e: React.MouseEvent): void => {
     e.preventDefault();
     const calc = new Calculator();
@@ -166,7 +177,7 @@ export class App extends React.Component<{}, AppState> {
           </form>
           <Paper>
             <button
-              onClick={(e) => this.generateStats(e)}
+              onClick={(e) => this.testAPI()}
               disabled={
                 this.state.year !== undefined && this.state.year.length < 1
               }
