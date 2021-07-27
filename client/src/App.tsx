@@ -49,6 +49,7 @@ export class App extends React.Component<{}, AppState> {
             return h.replace(regex, '');
           },
         });
+        axios.post('/takestats', result);
         this.setState({ year: result.data, loaded: true });
       });
   };
