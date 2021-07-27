@@ -77,6 +77,7 @@ export class App extends React.Component<{}, AppState> {
       year: [],
       stats: [],
     });
+    axios.post('http://localhost:3001/takestats');
   };
 
   renderExtremes = (summary: StatsObject): any => {
