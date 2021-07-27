@@ -33,6 +33,8 @@ export class App extends React.Component<{}, AppState> {
     stats: [],
   };
 
+  // Create POST route that will send the result of this function to an API call
+  // on the Express server that will then be put into a MySQL database
   createStatsArray = (e: React.DragEvent<HTMLDivElement>) => {
     Array.from(e.dataTransfer.files)
       .filter((file) => file.type === 'text/csv')
@@ -50,17 +52,7 @@ export class App extends React.Component<{}, AppState> {
       });
   };
 
-  testAPI = async () => {
-    const response = await fetch('/test');
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message);
-    }
-    console.log(body);
-    return body;
-  };
-
+  // Create GET route that will retrieve the data from MySQL
   generateStats = (e: React.MouseEvent): void => {
     e.preventDefault();
     const calc = new Calculator();
@@ -177,7 +169,7 @@ export class App extends React.Component<{}, AppState> {
           </form>
           <Paper>
             <button
-              onClick={(e) => this.testAPI()}
+              onClick={(e) => this.generateStats(e)}
               disabled={
                 this.state.year !== undefined && this.state.year.length < 1
               }
