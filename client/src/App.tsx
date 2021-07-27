@@ -4,6 +4,7 @@ import { Calculator } from './Calculator';
 import { StatsObject, YearStats, CsvObject } from './datatypes';
 import { Grid, Paper } from '@material-ui/core';
 import dayjs from 'dayjs';
+import axios from 'axios';
 
 const style = {
   fileDropper: {
