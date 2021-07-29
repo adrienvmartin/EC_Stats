@@ -3,6 +3,7 @@ const path = require('path');
 const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
+const parse = require('csv-parse');
 
 const PORT = process.env.PORT || 3001;
 
@@ -24,6 +25,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('file');
 
+// Create async endpoint that both uploads the file and uses createReadStream on it
 app.post('/upload', (req, res) => {
   fs.readdir(filepath, (err, files) => {
     if (err) throw err;
@@ -48,18 +50,27 @@ app.post('/upload', (req, res) => {
 app.post('/takestats', (req, res) => {
   const data = [];
   let thename;
-  // Use fs.readdir to get the filename
   fs.readdir(filepath, (err, files) => {
     if (err) {
       console.log(err);
     }
     console.log('files[0] = ' + files[0]);
     thename = files[0];
-    console.log('thename now equals ' + thename);
+    console.log('thename now equals ' + typeof thename);
   });
-  res.send({ message: thename });
-  console.log('thename = ' + thename);
-  // fs.createReadStream(__dirname, +thename);
+
+  fs.createReadStream(filepath + `/${thename}`).pipe(
+    parse({
+      delimiter: ',',
+    })
+      .on('data', (dataRow) => {
+        data.push(dataRow);
+        console.log('dataRow: ' + dataRow);
+      })
+      .on('end', () => {
+        console.log('data: ' + data);
+      })
+  );
 });
 
 app.listen(PORT, () => {
