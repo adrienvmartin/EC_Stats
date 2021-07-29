@@ -49,17 +49,17 @@ app.post('/upload', (req, res) => {
 
 app.post('/takestats', (req, res) => {
   const data = [];
-  let thename;
+  const thename = [];
   fs.readdir(filepath, (err, files) => {
     if (err) {
       console.log(err);
     }
     console.log('files[0] = ' + files[0]);
-    thename = files[0];
+    thename.push(files[0]);
     console.log('thename now equals ' + typeof thename);
   });
 
-  fs.createReadStream(filepath + `/${thename}`).pipe(
+  fs.createReadStream(filepath + `/${thename[0]}`).pipe(
     parse({
       delimiter: ',',
     })
