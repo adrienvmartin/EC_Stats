@@ -26,6 +26,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('file');
 
+app.delete('/csv', (req, res) => {
+  fs.readdir(filepath, (err, files) => {
+    if (err) throw err;
+
+    for (const file of files) {
+      fs.unlink(path.join(filepath, file), (err) => {
+        if (err) throw err;
+      });
+    }
+  });
+});
+
 // Create async endpoint that both uploads the file and uses createReadStream on it
 app.post('/upload', (req, res) => {
   fs.readdir(filepath, (err, files) => {
