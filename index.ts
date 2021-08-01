@@ -67,10 +67,10 @@ app.post('/takestats', (req, res) => {
     })
       .on('data', (dataRow) => {
         data.push(dataRow);
-        console.log('dataRow: ' + dataRow);
       })
       .on('end', () => {
-        console.log('data: ' + data);
+        // console.log('data: ' + data);
+        res.send({ data });
       })
   );
 });
