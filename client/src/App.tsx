@@ -62,13 +62,21 @@ export class App extends React.Component<{}, AppState> {
   };
 
   // Create GET route that will retrieve the data from MySQL
-  generateStats = (e: React.MouseEvent): void => {
-    e.preventDefault();
+  generateStats = async () => {
+    /* e.preventDefault();
     const calc = new Calculator();
     if (this.state.year !== undefined) {
       const stats = calc.getYearStats(this.state.year);
       this.setState({ stats });
-    }
+    } */
+    const results = await axios.post('http://localhost:3001/takestats');
+    const data = results.data.data;
+    data.shift();
+    console.log(data);
+    const calc = new Calculator();
+    const stats = calc.getYearStats(data);
+    this.setState({ stats });
+    console.log(this.state);
   };
 
   clearCsv = (): void => {
@@ -77,7 +85,7 @@ export class App extends React.Component<{}, AppState> {
       year: [],
       stats: [],
     });
-    axios.post('http://localhost:3001/takestats');
+    axios.delete('http://localhost:3001/csv');
   };
 
   renderExtremes = (summary: StatsObject): any => {
@@ -162,6 +170,7 @@ export class App extends React.Component<{}, AppState> {
     axios.post('http://localhost:3001/upload', data, {}).then((res) => {
       console.log(res.statusText);
     });
+    this.setState({ loaded: true });
   };
 
   render() {
@@ -208,9 +217,10 @@ export class App extends React.Component<{}, AppState> {
           </form>
           <Paper>
             <button
-              onClick={(e) => this.generateStats(e)}
+              onClick={() => this.generateStats()}
               disabled={
-                this.state.year !== undefined && this.state.year.length < 1
+                /* this.state.year !== undefined && this.state.year.length < 1 */
+                !this.state.loaded
               }
             >
               Generate Stats
