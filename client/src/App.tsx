@@ -58,25 +58,32 @@ export class App extends React.Component<{}, AppState> {
         // axios.post('/takestats', result);
 
         this.setState({ year: result.data, loaded: true });
+        console.log('Result: ' + result);
       });
   };
 
   // Create GET route that will retrieve the data from MySQL
   generateStats = async () => {
-    /* e.preventDefault();
+    const results = await axios.post('http://localhost:3001/takestats');
+    const data = results.data.data;
+    data.shift();
+    this.setState({ year: data });
     const calc = new Calculator();
     if (this.state.year !== undefined) {
       const stats = calc.getYearStats(this.state.year);
       this.setState({ stats });
-    } */
-    const results = await axios.post('http://localhost:3001/takestats');
-    const data = results.data.data;
-    data.shift();
-    console.log(data);
-    const calc = new Calculator();
-    const stats = calc.getYearStats(data);
-    this.setState({ stats });
+    }
     console.log(this.state);
+  };
+
+  oldGenerateStats = (e: React.MouseEvent): void => {
+    e.preventDefault();
+    const calc = new Calculator();
+    if (this.state.year !== undefined) {
+      const stats = calc.getYearStats(this.state.year);
+      this.setState({ stats });
+      console.log(this.state);
+    }
   };
 
   clearCsv = (): void => {
@@ -224,6 +231,9 @@ export class App extends React.Component<{}, AppState> {
               }
             >
               Generate Stats
+            </button>
+            <button onClick={(e) => this.oldGenerateStats(e)}>
+              OLD Generate Stats
             </button>
             {'   '}
             <button onClick={() => this.clearCsv()}>Clear CSV</button>
