@@ -19,7 +19,8 @@ const storage = multer.diskStorage({
     cb(null, filepath);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalName);
+    // cb(null, Date.now() + '-' + file.originalName);
+    cb(null, 'csvfile');
   },
 });
 
@@ -59,9 +60,10 @@ app.post('/takestats', (req, res) => {
     console.log('thename now equals ' + typeof thename);
   });
 
-  fs.createReadStream(filepath + `/${thename[0]}`).pipe(
+  fs.createReadStream(filepath + `/csvfile`).pipe(
     parse({
       delimiter: ',',
+      bom: true,
     })
       .on('data', (dataRow) => {
         data.push(dataRow);
