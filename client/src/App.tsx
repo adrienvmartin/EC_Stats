@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { parse, ParseResult } from 'papaparse';
 // import parse from 'csv-parse';
 import fs from 'fs';
@@ -37,6 +37,10 @@ export class App extends React.Component<{}, AppState> {
     stats: [],
     selectedFile: null,
   };
+
+  componentDidMount() {
+    axios.delete('http://localhost:3001/csv');
+  }
 
   // Create POST route that will send the result of this function to an API call
   // on the Express server that will then be put into a MySQL database
